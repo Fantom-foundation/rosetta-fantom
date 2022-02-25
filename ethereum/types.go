@@ -17,6 +17,7 @@ package ethereum
 import (
 	"context"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/ethereum/go-ethereum/params"
@@ -29,6 +30,17 @@ const (
 
 	// Blockchain is Ethereum.
 	Blockchain string = "Ethereum"
+
+	// FantomBlockchain is Fantom.
+	FantomBlockchain string = "Fantom"
+
+	// FantomNetwork is the value of the network
+	// in NetworkIdentifier.
+	FantomNetwork string = "Fantom"
+
+	// FantomTestnetNetwork is the value of the network
+	// in NetworkIdentifier.
+	FantomTestnetNetwork string = "FantomTestnet"
 
 	// MainnetNetwork is the value of the network
 	// in MainnetNetworkIdentifier.
@@ -127,6 +139,11 @@ const (
 )
 
 var (
+	FantomMainnetGenesisHash = common.HexToHash("0x4a53c5445584b3bfc20dbfb2ec18ae20037c716f3ba2d9e1da768a9deca17cb4")
+	FantomTestnetGenesisHash = common.HexToHash("0xc4a5fc96e575a16a9a0c7349d44dc4d0f602a54e0a8543360c2fee4c3937b49e")
+)
+
+var (
 	// RopstenGethArguments are the arguments to start a ropsten geth instance.
 	RopstenGethArguments = fmt.Sprintf("%s --ropsten", MainnetGethArguments)
 
@@ -135,6 +152,20 @@ var (
 
 	// GoerliGethArguments are the arguments to start a ropsten geth instance.
 	GoerliGethArguments = fmt.Sprintf("%s --goerli", MainnetGethArguments)
+
+	// FantomMainnetGenesisBlockIdentifier is the *types.BlockIdentifier
+	// of the mainnet genesis block.
+	FantomMainnetGenesisBlockIdentifier = &types.BlockIdentifier{
+		Hash:  FantomMainnetGenesisHash.Hex(),
+		Index: GenesisBlockIndex, // TODO?
+	}
+
+	// FantomTestnetGenesisBlockIdentifier is the *types.BlockIdentifier
+	// of the mainnet genesis block.
+	FantomTestnetGenesisBlockIdentifier = &types.BlockIdentifier{
+		Hash:  FantomTestnetGenesisHash.Hex(),
+		Index: GenesisBlockIndex, // TODO?
+	}
 
 	// MainnetGenesisBlockIdentifier is the *types.BlockIdentifier
 	// of the mainnet genesis block.

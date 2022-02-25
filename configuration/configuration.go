@@ -39,6 +39,12 @@ const (
 	// to make outbound connections.
 	Offline Mode = "OFFLINE"
 
+	// Fantom is the Fantom Mainnet.
+	Fantom string = "FANTOM"
+
+	// FantomTestnet is the Fantom Testnet.
+	FantomTestnet string = "FANTOMTESTNET"
+
 	// Mainnet is the Ethereum Mainnet.
 	Mainnet string = "MAINNET"
 
@@ -124,6 +130,22 @@ func LoadConfiguration() (*Configuration, error) {
 
 	networkValue := os.Getenv(NetworkEnv)
 	switch networkValue {
+	case Fantom:
+		config.Network = &types.NetworkIdentifier{
+			Blockchain: ethereum.FantomBlockchain,
+			Network:    ethereum.FantomNetwork,
+		}
+		config.GenesisBlockIdentifier = ethereum.FantomMainnetGenesisBlockIdentifier
+		config.Params = params.MainnetChainConfig // TODO
+		config.GethArguments = ethereum.MainnetGethArguments
+	case FantomTestnet:
+		config.Network = &types.NetworkIdentifier{
+			Blockchain: ethereum.FantomBlockchain,
+			Network:    ethereum.FantomTestnetNetwork,
+		}
+		config.GenesisBlockIdentifier = ethereum.FantomTestnetGenesisBlockIdentifier
+		config.Params = params.MainnetChainConfig // TODO
+		config.GethArguments = ethereum.MainnetGethArguments
 	case Mainnet:
 		config.Network = &types.NetworkIdentifier{
 			Blockchain: ethereum.Blockchain,
