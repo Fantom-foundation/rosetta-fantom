@@ -60,7 +60,7 @@ const (
 
 	// Symbol is the symbol value
 	// used in Currency.
-	Symbol = "ETH"
+	Symbol = "FTM"
 
 	// Decimals is the decimals value
 	// used in Currency.

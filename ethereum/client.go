@@ -148,6 +148,18 @@ func (ec *Client) PendingNonceAt(ctx context.Context, account common.Address) (u
 	return uint64(result), err
 }
 
+func (ec *Client) nonceAt(ctx context.Context, account common.Address, number *big.Int) (uint64, error) {
+	var result hexutil.Uint64
+	err := ec.c.CallContext(ctx, &result, "eth_getTransactionCount", account, toBlockNumArg(number))
+	return uint64(result), err
+}
+
+func (ec *Client) accountCode(ctx context.Context, account common.Address, number *big.Int) (string, error) {
+	var result string
+	err := ec.c.CallContext(ctx, &result, "eth_getCode", account, toBlockNumArg(number))
+	return result, err
+}
+
 // SuggestGasPrice retrieves the currently suggested gas price to allow a timely
 // execution of a transaction.
 func (ec *Client) SuggestGasPrice(ctx context.Context) (*big.Int, error) {
@@ -329,6 +341,18 @@ func (ec *Client) blockHeaderByNumber(ctx context.Context, number *big.Int) (*ty
 	}
 
 	return head, err
+}
+
+// Header returns a block header from the current canonical chain. If number is
+// nil, the latest known header is returned.
+func (ec *Client) balanceAt(ctx context.Context, address common.Address, number *big.Int) (*hexutil.Big, error) {
+	var balance *hexutil.Big
+	err := ec.c.CallContext(ctx, &balance, "eth_getBalance", address, toBlockNumArg(number))
+	if err == nil && balance == nil {
+		return nil, ethereum.NotFound
+	}
+
+	return balance, err
 }
 
 // Header returns a block header from the current canonical chain. If hash is empty
@@ -1403,63 +1427,40 @@ type graphqlBalance struct {
 
 // Balance returns the balance of a *RosettaTypes.AccountIdentifier
 // at a *RosettaTypes.PartialBlockIdentifier.
-//
-// We must use graphql to get the balance atomically (the
-// rpc method for balance does not allow for querying
-// by block hash nor return the block hash where
-// the balance was fetched).
 func (ec *Client) Balance(
 	ctx context.Context,
 	account *RosettaTypes.AccountIdentifier,
 	block *RosettaTypes.PartialBlockIdentifier,
 ) (*RosettaTypes.AccountBalanceResponse, error) {
-	blockQuery := ""
-	if block != nil {
-		if block.Hash != nil {
-			blockQuery = fmt.Sprintf(`hash: "%s"`, *block.Hash)
-		}
-		if block.Hash == nil && block.Index != nil {
-			blockQuery = fmt.Sprintf("number: %d", *block.Index)
-		}
-	}
 
-	result, err := ec.g.Query(ctx, fmt.Sprintf(`{
-			block(%s){
-				hash
-				number
-				account(address:"%s"){
-					balance
-					transactionCount
-					code
-				}
-			}
-		}`, blockQuery, account.Address))
+	var err error
+	var header *types.Header
+	if block.Hash != nil {
+		header, err = ec.blockHeaderByHash(ctx, *block.Hash)
+	} else if block.Index != nil {
+		header, err = ec.blockHeaderByNumber(ctx, big.NewInt(*block.Index))
+	} else {
+		header, err = ec.blockHeaderByNumber(ctx, nil) // latest block
+	}
+	if err != nil {
+		return nil, err
+	}
+	blockNum := header.Number
+	address := common.HexToAddress(account.Address)
+
+	code, err := ec.accountCode(ctx, address, blockNum)
 	if err != nil {
 		return nil, err
 	}
 
-	var bal graphqlBalance
-	if err := json.Unmarshal([]byte(result), &bal); err != nil {
+	balance, err := ec.balanceAt(ctx, address, blockNum)
+	if err != nil {
 		return nil, err
 	}
 
-	if len(bal.Errors) > 0 {
-		return nil, errors.New(RosettaTypes.PrintStruct(bal.Errors))
-	}
-
-	balance, ok := new(big.Int).SetString(bal.Data.Block.Account.Balance[2:], 16)
-	if !ok {
-		return nil, fmt.Errorf(
-			"could not extract account balance from %s",
-			bal.Data.Block.Account.Balance,
-		)
-	}
-	nonce, ok := new(big.Int).SetString(bal.Data.Block.Account.Nonce[2:], 16)
-	if !ok {
-		return nil, fmt.Errorf(
-			"could not extract account nonce from %s",
-			bal.Data.Block.Account.Nonce,
-		)
+	nonce, err := ec.nonceAt(ctx, address, blockNum)
+	if err != nil {
+		return nil, err
 	}
 
 	return &RosettaTypes.AccountBalanceResponse{
@@ -1470,12 +1471,12 @@ func (ec *Client) Balance(
 			},
 		},
 		BlockIdentifier: &RosettaTypes.BlockIdentifier{
-			Hash:  bal.Data.Block.Hash,
-			Index: bal.Data.Block.Number,
+			Hash:  header.Hash().String(),
+			Index: header.Number.Int64(),
 		},
 		Metadata: map[string]interface{}{
-			"nonce": nonce.Int64(),
-			"code":  bal.Data.Block.Account.Code,
+			"nonce": int64(nonce),
+			"code":  code,
 		},
 	}, nil
 }
