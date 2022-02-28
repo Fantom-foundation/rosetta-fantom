@@ -269,7 +269,7 @@ func (ec *Client) Transaction(
 		)
 	}
 	if err != nil {
-		return nil, fmt.Errorf("%w: could not get receipt for %x", err, body.tx.Hash())
+		return nil, fmt.Errorf("%w: could not get tx receipt for %x", err, body.tx.Hash())
 	}
 
 	var traces *Call
@@ -469,7 +469,7 @@ func (ec *Client) getBlock(
 	// Get all transaction receipts
 	receipts, err := ec.getBlockReceipts(ctx, body.Hash, body.Transactions)
 	if err != nil {
-		return nil, nil, fmt.Errorf("%w: could not get receipts for %x", err, body.Hash[:])
+		return nil, nil, fmt.Errorf("%w: could not get block receipts for %x", err, body.Hash[:])
 	}
 
 	// Get block traces (not possible to make idempotent block transaction trace requests)
@@ -480,13 +480,17 @@ func (ec *Client) getBlock(
 	var traces []*rpcCall
 	var rawTraces []*rpcRawCall
 	var addTraces bool
+	/*
 	if head.Number.Int64() != GenesisBlockIndex { // not possible to get traces at genesis
-		addTraces = true
 		traces, rawTraces, err = ec.getBlockTraces(ctx, body.Hash)
 		if err != nil {
-			return nil, nil, fmt.Errorf("%w: could not get traces for %x", err, body.Hash[:])
+			log.Println("could not get traces")
+			//return nil, nil, fmt.Errorf("%w: could not get traces for %x", err, body.Hash[:])
+		} else {
+			addTraces = true
 		}
 	}
+	 */
 
 	// Convert all txs to loaded txs
 	txs := make([]*types.Transaction, len(body.Transactions))
@@ -1187,7 +1191,7 @@ func (ec *Client) getParsedBlock(
 
 	txs, err := ec.populateTransactions(blockIdentifier, block, loadedTransactions)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to populate transactions: %w", err)
 	}
 
 	return &RosettaTypes.Block{
@@ -1224,7 +1228,7 @@ func (ec *Client) populateTransactions(
 			tx,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("%w: cannot parse %s", err, tx.Transaction.Hash().Hex())
+			return nil, fmt.Errorf("cannot populate tx %s: %w", tx.Transaction.Hash().Hex(), err)
 		}
 
 		transactions[i+1] = transaction
@@ -1243,26 +1247,30 @@ func (ec *Client) populateTransaction(
 	ops = append(ops, feeOps...)
 
 	// Compute trace operations
-	traces := flattenTraces(tx.Trace, []*flatCall{})
+	if tx.Trace != nil {
+		traces := flattenTraces(tx.Trace, []*flatCall{})
 
-	traceOps := traceOps(traces, len(ops))
-	ops = append(ops, traceOps...)
+		traceOps := traceOps(traces, len(ops))
+		ops = append(ops, traceOps...)
+	}
 
 	// Marshal receipt and trace data
 	// TODO: replace with marshalJSONMap (used in `services`)
 	receiptBytes, err := tx.Receipt.MarshalJSON()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to marshal receipt: %w", err)
 	}
 
 	var receiptMap map[string]interface{}
 	if err := json.Unmarshal(receiptBytes, &receiptMap); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to unmarshal receipt map: %w (%s)", err, receiptBytes)
 	}
 
 	var traceMap map[string]interface{}
-	if err := json.Unmarshal(tx.RawTrace, &traceMap); err != nil {
-		return nil, err
+	if tx.RawTrace != nil {
+		if err := json.Unmarshal(tx.RawTrace, &traceMap); err != nil {
+			return nil, fmt.Errorf("unable to unmarshal trace map: %w (%s)", err, receiptBytes)
+		}
 	}
 
 	populatedTransaction := &RosettaTypes.Transaction{
