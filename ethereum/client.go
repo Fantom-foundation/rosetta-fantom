@@ -440,36 +440,37 @@ func (ec *Client) getBlock(
 	args ...interface{},
 ) (
 	*types.Block,
+	*common.Hash,
 	[]*loadedTransaction,
 	error,
 ) {
 	var raw json.RawMessage
 	err := ec.c.CallContext(ctx, &raw, blockMethod, args...)
 	if err != nil {
-		return nil, nil, fmt.Errorf("%w: block fetch failed", err)
+		return nil, nil, nil, fmt.Errorf("%w: block fetch failed", err)
 	} else if len(raw) == 0 {
-		return nil, nil, ethereum.NotFound
+		return nil, nil, nil, ethereum.NotFound
 	}
 
 	// Decode header and transactions
 	var head types.Header
 	var body rpcBlock
 	if err := json.Unmarshal(raw, &head); err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	if err := json.Unmarshal(raw, &body); err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	uncles, err := ec.getUncles(ctx, &head, &body)
 	if err != nil {
-		return nil, nil, fmt.Errorf("%w: unable to get uncles", err)
+		return nil, nil, nil, fmt.Errorf("%w: unable to get uncles", err)
 	}
 
 	// Get all transaction receipts
 	receipts, err := ec.getBlockReceipts(ctx, body.Hash, body.Transactions)
 	if err != nil {
-		return nil, nil, fmt.Errorf("%w: could not get block receipts for %x", err, body.Hash[:])
+		return nil, nil, nil, fmt.Errorf("%w: could not get block receipts for %x", err, body.Hash[:])
 	}
 
 	// Get block traces (not possible to make idempotent block transaction trace requests)
@@ -499,14 +500,14 @@ func (ec *Client) getBlock(
 		txs[i] = tx.tx
 		receipt := receipts[i]
 		if err != nil {
-			return nil, nil, fmt.Errorf("%w: failure getting effective gas price", err)
+			return nil, nil, nil, fmt.Errorf("%w: failure getting effective gas price", err)
 		}
 		loadedTxs[i] = tx.LoadedTransaction()
 		loadedTxs[i].Transaction = txs[i]
 
 		feeAmount, feeBurned, err := calculateGas(txs[i], receipt, head)
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		loadedTxs[i].FeeAmount = feeAmount
 		loadedTxs[i].FeeBurned = feeBurned
@@ -522,7 +523,7 @@ func (ec *Client) getBlock(
 		loadedTxs[i].RawTrace = rawTraces[i].Result
 	}
 
-	return types.NewBlockWithHeader(&head).WithBody(txs, uncles), loadedTxs, nil
+	return types.NewBlockWithHeader(&head).WithBody(txs, uncles), &body.Hash, loadedTxs, nil
 }
 
 func calculateGas(
@@ -1171,13 +1172,13 @@ func (ec *Client) getParsedBlock(
 	*RosettaTypes.Block,
 	error,
 ) {
-	block, loadedTransactions, err := ec.getBlock(ctx, blockMethod, args...)
+	block, blockHash, loadedTransactions, err := ec.getBlock(ctx, blockMethod, args...)
 	if err != nil {
 		return nil, fmt.Errorf("%w: could not get block", err)
 	}
 
 	blockIdentifier := &RosettaTypes.BlockIdentifier{
-		Hash:  block.Hash().String(),
+		Hash:  blockHash.String(),
 		Index: block.Number().Int64(),
 	}
 

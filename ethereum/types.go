@@ -139,8 +139,11 @@ const (
 )
 
 var (
-	FantomMainnetGenesisHash = common.HexToHash("0x4a53c5445584b3bfc20dbfb2ec18ae20037c716f3ba2d9e1da768a9deca17cb4")
-	FantomTestnetGenesisHash = common.HexToHash("0xc4a5fc96e575a16a9a0c7349d44dc4d0f602a54e0a8543360c2fee4c3937b49e")
+	// FantomMainnetGenesisHash represents the hash of the genesis block (block 0)
+	FantomMainnetGenesisHash = common.HexToHash("0x00000000000003e83fddf1e9330f0a8691d9f0b2af57b38c3bb85488488a40df")
+
+	// FantomTestnetGenesisHash represents the hash of the genesis block (block 0)
+	FantomTestnetGenesisHash = common.HexToHash("0x00000000000003e8c717f00dc4306a6ff72eabc9a6ec6e4a46bf6ba044ca88d2")
 )
 
 var (
