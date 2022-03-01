@@ -984,6 +984,8 @@ func feeOps(tx *loadedTransaction) []*RosettaTypes.Operation {
 			},
 		},
 
+		// mining rewards are in the end of epoch in Fantom
+		/*
 		{
 			OperationIdentifier: &RosettaTypes.OperationIdentifier{
 				Index: 1,
@@ -1003,6 +1005,7 @@ func feeOps(tx *loadedTransaction) []*RosettaTypes.Operation {
 				Currency: Currency,
 			},
 		},
+		 */
 	}
 	if tx.FeeBurned == nil {
 		return ops
@@ -1214,15 +1217,17 @@ func (ec *Client) populateTransactions(
 ) ([]*RosettaTypes.Transaction, error) {
 	transactions := make(
 		[]*RosettaTypes.Transaction,
-		len(block.Transactions())+1, // include reward tx
+		len(block.Transactions()), // include reward tx
 	)
 
+	/*
 	// Compute reward transaction (block + uncle reward)
 	transactions[0] = ec.blockRewardTransaction(
 		blockIdentifier,
 		block.Coinbase().String(),
 		block.Uncles(),
 	)
+	*/
 
 	for i, tx := range loadedTransactions {
 		transaction, err := ec.populateTransaction(
@@ -1232,7 +1237,7 @@ func (ec *Client) populateTransactions(
 			return nil, fmt.Errorf("cannot populate tx %s: %w", tx.Transaction.Hash().Hex(), err)
 		}
 
-		transactions[i+1] = transaction
+		transactions[i] = transaction
 	}
 
 	return transactions, nil
