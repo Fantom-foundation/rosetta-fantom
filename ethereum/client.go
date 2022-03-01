@@ -131,7 +131,7 @@ func (ec *Client) Status(ctx context.Context) (
 	}
 
 	return &RosettaTypes.BlockIdentifier{
-			Hash:  header.Hash().Hex(),
+			Hash:  header.Hash.Hex(),
 			Index: header.Number.Int64(),
 		},
 		convertTime(header.Time),
@@ -248,7 +248,7 @@ func (ec *Client) Transaction(
 		return nil, err
 	}
 
-	var header *types.Header
+	var header *blockHeader
 	if blockIdentifier.Hash != "" {
 		header, err = ec.blockHeaderByHash(ctx, blockIdentifier.Hash)
 	} else {
@@ -285,7 +285,7 @@ func (ec *Client) Transaction(
 
 	loadedTx := body.LoadedTransaction()
 	loadedTx.Transaction = body.tx
-	feeAmount, feeBurned, err := calculateGas(body.tx, receipt, *header)
+	feeAmount, feeBurned, err := calculateGas(body.tx, receipt, header.Header)
 	if err != nil {
 		return nil, err
 	}
@@ -333,8 +333,8 @@ func (ec *Client) Block(
 
 // Header returns a block header from the current canonical chain. If number is
 // nil, the latest known header is returned.
-func (ec *Client) blockHeaderByNumber(ctx context.Context, number *big.Int) (*types.Header, error) {
-	var head *types.Header
+func (ec *Client) blockHeaderByNumber(ctx context.Context, number *big.Int) (*blockHeader, error) {
+	var head *blockHeader
 	err := ec.c.CallContext(ctx, &head, "eth_getBlockByNumber", toBlockNumArg(number), false)
 	if err == nil && head == nil {
 		return nil, ethereum.NotFound
@@ -345,20 +345,20 @@ func (ec *Client) blockHeaderByNumber(ctx context.Context, number *big.Int) (*ty
 
 // Header returns a block header from the current canonical chain. If number is
 // nil, the latest known header is returned.
-func (ec *Client) balanceAt(ctx context.Context, address common.Address, number *big.Int) (*hexutil.Big, error) {
+func (ec *Client) balanceAt(ctx context.Context, address common.Address, number *big.Int) (*big.Int, error) {
 	var balance *hexutil.Big
 	err := ec.c.CallContext(ctx, &balance, "eth_getBalance", address, toBlockNumArg(number))
 	if err == nil && balance == nil {
 		return nil, ethereum.NotFound
 	}
 
-	return balance, err
+	return (*big.Int)(balance), err
 }
 
 // Header returns a block header from the current canonical chain. If hash is empty
 // it returns error.
-func (ec *Client) blockHeaderByHash(ctx context.Context, hash string) (*types.Header, error) {
-	var head *types.Header
+func (ec *Client) blockHeaderByHash(ctx context.Context, hash string) (*blockHeader, error) {
+	var head *blockHeader
 	if hash == "" {
 		return nil, errors.New("hash is empty")
 	}
@@ -1443,7 +1443,7 @@ func (ec *Client) Balance(
 ) (*RosettaTypes.AccountBalanceResponse, error) {
 
 	var err error
-	var header *types.Header
+	var header *blockHeader
 	if block.Hash != nil {
 		header, err = ec.blockHeaderByHash(ctx, *block.Hash)
 	} else if block.Index != nil {
@@ -1480,7 +1480,7 @@ func (ec *Client) Balance(
 			},
 		},
 		BlockIdentifier: &RosettaTypes.BlockIdentifier{
-			Hash:  header.Hash().String(),
+			Hash:  header.Hash.String(),
 			Index: header.Number.Int64(),
 		},
 		Metadata: map[string]interface{}{
