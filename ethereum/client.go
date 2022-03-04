@@ -481,17 +481,13 @@ func (ec *Client) getBlock(
 	var traces []*rpcCall
 	var rawTraces []*rpcRawCall
 	var addTraces bool
-	/*
 	if head.Number.Int64() != GenesisBlockIndex { // not possible to get traces at genesis
 		traces, rawTraces, err = ec.getBlockTraces(ctx, body.Hash)
 		if err != nil {
-			log.Println("could not get traces")
-			//return nil, nil, fmt.Errorf("%w: could not get traces for %x", err, body.Hash[:])
-		} else {
-			addTraces = true
+			return nil, nil, nil, fmt.Errorf("%w: could not get traces for %x", err, body.Hash[:])
 		}
+		addTraces = true
 	}
-	 */
 
 	// Convert all txs to loaded txs
 	txs := make([]*types.Transaction, len(body.Transactions))
