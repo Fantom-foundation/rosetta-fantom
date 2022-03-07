@@ -28,35 +28,16 @@ const (
 	// NodeVersion is the version of geth we are using.
 	NodeVersion = "1.9.24"
 
-	// Blockchain is Ethereum.
-	Blockchain string = "Ethereum"
+	// Blockchain is Fantom.
+	Blockchain string = "Fantom"
 
-	// FantomBlockchain is Fantom.
-	FantomBlockchain string = "Fantom"
-
-	// FantomNetwork is the value of the network
+	// TestnetNetwork is the value of the network
 	// in NetworkIdentifier.
-	FantomNetwork string = "Fantom"
-
-	// FantomTestnetNetwork is the value of the network
-	// in NetworkIdentifier.
-	FantomTestnetNetwork string = "FantomTestnet"
+	TestnetNetwork string = "Testnet"
 
 	// MainnetNetwork is the value of the network
 	// in MainnetNetworkIdentifier.
 	MainnetNetwork string = "Mainnet"
-
-	// RopstenNetwork is the value of the network
-	// in RopstenNetworkIdentifier.
-	RopstenNetwork string = "Ropsten"
-
-	// RinkebyNetwork is the value of the network
-	// in RinkebyNetworkNetworkIdentifier.
-	RinkebyNetwork string = "Rinkeby"
-
-	// GoerliNetwork is the value of the network
-	// in GoerliNetworkNetworkIdentifier.
-	GoerliNetwork string = "Goerli"
 
 	// Symbol is the symbol value
 	// used in Currency.
@@ -147,14 +128,8 @@ var (
 )
 
 var (
-	// RopstenGethArguments are the arguments to start a ropsten geth instance.
-	RopstenGethArguments = fmt.Sprintf("%s --ropsten", MainnetGethArguments)
-
-	// RinkebyGethArguments are the arguments to start a rinkeby geth instance.
-	RinkebyGethArguments = fmt.Sprintf("%s --rinkeby", MainnetGethArguments)
-
-	// GoerliGethArguments are the arguments to start a ropsten geth instance.
-	GoerliGethArguments = fmt.Sprintf("%s --goerli", MainnetGethArguments)
+	// TestnetGethArguments are the arguments to start a ropsten geth instance.
+	TestnetGethArguments = fmt.Sprintf("%s --ropsten", MainnetGethArguments)
 
 	// FantomMainnetGenesisBlockIdentifier is the *types.BlockIdentifier
 	// of the mainnet genesis block.

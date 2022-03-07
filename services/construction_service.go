@@ -232,7 +232,7 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 	toAdd := toOp.Account.Address
 	nonce := metadata.Nonce
 	gasPrice := metadata.GasPrice
-	chainID := s.config.Params.ChainID
+	chainID := s.config.ChainID
 	transferGasLimit := uint64(ethereum.TransferGasLimit)
 	transferData := []byte{}
 

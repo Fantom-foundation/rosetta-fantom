@@ -22,19 +22,16 @@ import (
 	"log"
 	"math/big"
 	"net/http"
-	"strconv"
 	"time"
 
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
 	"github.com/ethereum/go-ethereum/core/types"
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/eth/tracers"
 	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ethereum/go-ethereum/rpc"
 	"golang.org/x/sync/semaphore"
@@ -57,7 +54,6 @@ const (
 //
 // Client borrows HEAVILY from https://github.com/ethereum/go-ethereum/tree/master/ethclient.
 type Client struct {
-	p  *params.ChainConfig
 	tc *tracers.TraceConfig
 
 	c JSONRPC
@@ -69,7 +65,7 @@ type Client struct {
 }
 
 // NewClient creates a Client that from the provided url and params.
-func NewClient(url string, params *params.ChainConfig, skipAdminCalls bool) (*Client, error) {
+func NewClient(url string, skipAdminCalls bool) (*Client, error) {
 	c, err := rpc.DialHTTPWithClient(url, &http.Client{
 		Timeout: gethHTTPTimeout,
 	})
@@ -87,7 +83,7 @@ func NewClient(url string, params *params.ChainConfig, skipAdminCalls bool) (*Cl
 		return nil, fmt.Errorf("%w: unable to create GraphQL client", err)
 	}
 
-	return &Client{params, tc, c, g, semaphore.NewWeighted(maxTraceConcurrency), skipAdminCalls}, nil
+	return &Client{tc, c, g, semaphore.NewWeighted(maxTraceConcurrency), skipAdminCalls}, nil
 }
 
 // Close shuts down the RPC client connection.
@@ -1289,97 +1285,6 @@ func (ec *Client) populateTransaction(
 	}
 
 	return populatedTransaction, nil
-}
-
-// miningReward returns the mining reward
-// for a given block height.
-//
-// Source:
-// https://github.com/ethereum/go-ethereum/blob/master/consensus/ethash/consensus.go#L646-L653
-func (ec *Client) miningReward(
-	currentBlock *big.Int,
-) int64 {
-	blockReward := ethash.FrontierBlockReward.Int64()
-	if ec.p.IsByzantium(currentBlock) {
-		blockReward = ethash.ByzantiumBlockReward.Int64()
-	}
-
-	if ec.p.IsConstantinople(currentBlock) {
-		blockReward = ethash.ConstantinopleBlockReward.Int64()
-	}
-
-	return blockReward
-}
-
-func (ec *Client) blockRewardTransaction(
-	blockIdentifier *RosettaTypes.BlockIdentifier,
-	miner string,
-	uncles []*EthTypes.Header,
-) *RosettaTypes.Transaction {
-	var ops []*RosettaTypes.Operation
-	miningReward := ec.miningReward(big.NewInt(blockIdentifier.Index))
-
-	// Calculate miner rewards
-	minerReward := miningReward
-	numUncles := len(uncles)
-	if len(uncles) > 0 {
-		reward := new(big.Float)
-		uncleReward := float64(numUncles) / UnclesRewardMultiplier
-		rewardFloat := reward.Mul(big.NewFloat(uncleReward), big.NewFloat(float64(miningReward)))
-		rewardInt, _ := rewardFloat.Int64()
-		minerReward += rewardInt
-	}
-
-	miningRewardOp := &RosettaTypes.Operation{
-		OperationIdentifier: &RosettaTypes.OperationIdentifier{
-			Index: 0,
-		},
-		Type:   MinerRewardOpType,
-		Status: RosettaTypes.String(SuccessStatus),
-		Account: &RosettaTypes.AccountIdentifier{
-			Address: MustChecksum(miner),
-		},
-		Amount: &RosettaTypes.Amount{
-			Value:    strconv.FormatInt(minerReward, 10),
-			Currency: Currency,
-		},
-	}
-	ops = append(ops, miningRewardOp)
-
-	// Calculate uncle rewards
-	for _, b := range uncles {
-		uncleMiner := b.Coinbase.String()
-		uncleBlock := b.Number.Int64()
-		uncleRewardBlock := new(
-			big.Int,
-		).Mul(
-			big.NewInt(uncleBlock+MaxUncleDepth-blockIdentifier.Index),
-			big.NewInt(miningReward/MaxUncleDepth),
-		)
-
-		uncleRewardOp := &RosettaTypes.Operation{
-			OperationIdentifier: &RosettaTypes.OperationIdentifier{
-				Index: int64(len(ops)),
-			},
-			Type:   UncleRewardOpType,
-			Status: RosettaTypes.String(SuccessStatus),
-			Account: &RosettaTypes.AccountIdentifier{
-				Address: MustChecksum(uncleMiner),
-			},
-			Amount: &RosettaTypes.Amount{
-				Value:    uncleRewardBlock.String(),
-				Currency: Currency,
-			},
-		}
-		ops = append(ops, uncleRewardOp)
-	}
-
-	return &RosettaTypes.Transaction{
-		TransactionIdentifier: &RosettaTypes.TransactionIdentifier{
-			Hash: blockIdentifier.Hash,
-		},
-		Operations: ops,
-	}
 }
 
 type rpcProgress struct {

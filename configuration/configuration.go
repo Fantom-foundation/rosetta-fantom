@@ -17,13 +17,13 @@ package configuration
 import (
 	"errors"
 	"fmt"
+	"math/big"
 	"os"
 	"strconv"
 
 	"github.com/coinbase/rosetta-ethereum/ethereum"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/ethereum/go-ethereum/params"
 )
 
 // Mode is the setting that determines if
@@ -39,25 +39,10 @@ const (
 	// to make outbound connections.
 	Offline Mode = "OFFLINE"
 
-	// Fantom is the Fantom Mainnet.
-	Fantom string = "FANTOM"
-
-	// FantomTestnet is the Fantom Testnet.
-	FantomTestnet string = "FANTOMTESTNET"
-
-	// Mainnet is the Ethereum Mainnet.
+	// Mainnet is the Fantom Mainnet.
 	Mainnet string = "MAINNET"
 
-	// Ropsten is the Ethereum Ropsten testnet.
-	Ropsten string = "ROPSTEN"
-
-	// Rinkeby is the Ethereum Rinkeby testnet.
-	Rinkeby string = "RINKEBY"
-
-	// Goerli is the Ethereum Görli testnet.
-	Goerli string = "GOERLI"
-
-	// Testnet defaults to `Ropsten` for backwards compatibility.
+	// Testnet is the Fantom Testnet.
 	Testnet string = "TESTNET"
 
 	// DataDirectory is the default location for all
@@ -106,9 +91,7 @@ type Configuration struct {
 	Port                   int
 	GethArguments          string
 	SkipGethAdmin          bool
-
-	// Block Reward Data
-	Params *params.ChainConfig
+	ChainID                *big.Int
 }
 
 // LoadConfiguration attempts to create a new Configuration
@@ -130,54 +113,22 @@ func LoadConfiguration() (*Configuration, error) {
 
 	networkValue := os.Getenv(NetworkEnv)
 	switch networkValue {
-	case Fantom:
-		config.Network = &types.NetworkIdentifier{
-			Blockchain: ethereum.FantomBlockchain,
-			Network:    ethereum.FantomNetwork,
-		}
-		config.GenesisBlockIdentifier = ethereum.FantomMainnetGenesisBlockIdentifier
-		config.Params = params.MainnetChainConfig // TODO
-		config.GethArguments = ethereum.MainnetGethArguments
-	case FantomTestnet:
-		config.Network = &types.NetworkIdentifier{
-			Blockchain: ethereum.FantomBlockchain,
-			Network:    ethereum.FantomTestnetNetwork,
-		}
-		config.GenesisBlockIdentifier = ethereum.FantomTestnetGenesisBlockIdentifier
-		config.Params = params.MainnetChainConfig // TODO
-		config.GethArguments = ethereum.MainnetGethArguments
 	case Mainnet:
 		config.Network = &types.NetworkIdentifier{
 			Blockchain: ethereum.Blockchain,
 			Network:    ethereum.MainnetNetwork,
 		}
-		config.GenesisBlockIdentifier = ethereum.MainnetGenesisBlockIdentifier
-		config.Params = params.MainnetChainConfig
+		config.GenesisBlockIdentifier = ethereum.FantomMainnetGenesisBlockIdentifier
+		config.ChainID = big.NewInt(0xFA)
 		config.GethArguments = ethereum.MainnetGethArguments
-	case Testnet, Ropsten:
+	case Testnet:
 		config.Network = &types.NetworkIdentifier{
 			Blockchain: ethereum.Blockchain,
-			Network:    ethereum.RopstenNetwork,
+			Network:    ethereum.TestnetNetwork,
 		}
-		config.GenesisBlockIdentifier = ethereum.RopstenGenesisBlockIdentifier
-		config.Params = params.RopstenChainConfig
-		config.GethArguments = ethereum.RopstenGethArguments
-	case Rinkeby:
-		config.Network = &types.NetworkIdentifier{
-			Blockchain: ethereum.Blockchain,
-			Network:    ethereum.RinkebyNetwork,
-		}
-		config.GenesisBlockIdentifier = ethereum.RinkebyGenesisBlockIdentifier
-		config.Params = params.RinkebyChainConfig
-		config.GethArguments = ethereum.RinkebyGethArguments
-	case Goerli:
-		config.Network = &types.NetworkIdentifier{
-			Blockchain: ethereum.Blockchain,
-			Network:    ethereum.GoerliNetwork,
-		}
-		config.GenesisBlockIdentifier = ethereum.GoerliGenesisBlockIdentifier
-		config.Params = params.GoerliChainConfig
-		config.GethArguments = ethereum.GoerliGethArguments
+		config.GenesisBlockIdentifier = ethereum.FantomTestnetGenesisBlockIdentifier
+		config.ChainID = big.NewInt(0xFA2)
+		config.GethArguments = ethereum.TestnetGethArguments
 	case "":
 		return nil, errors.New("NETWORK must be populated")
 	default:

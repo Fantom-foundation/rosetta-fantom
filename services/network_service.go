@@ -16,7 +16,6 @@ package services
 
 import (
 	"context"
-
 	"github.com/coinbase/rosetta-ethereum/configuration"
 	"github.com/coinbase/rosetta-ethereum/ethereum"
 

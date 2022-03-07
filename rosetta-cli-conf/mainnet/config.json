@@ -1,8 +1,9 @@
 {
   "network": {
-    "blockchain": "Ethereum",
+    "blockchain": "Fantom",
     "network": "Mainnet"
   },
+  "online_url": "http://localhost:8080",
   "data_directory": "cli-data",
   "http_timeout": 300,
   "max_retries": 15,
@@ -12,14 +13,8 @@
   "compression_disabled":true,
   "memory_limit_disabled":true,
   "data": {
-    "initial_balance_fetch_disabled":true,
-    "active_reconciliation_concurrency": 32,
     "bootstrap_balances": "bootstrap_balances.json",
-    "end_conditions": {
-      "reconciliation_coverage": {
-        "coverage": 0.95,
-        "from_tip": true
-      }
-    }
+    "exempt_accounts": "exempt_accounts.json",
+    "log_balance_changes":false
   }
 }

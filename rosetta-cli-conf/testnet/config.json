@@ -1,7 +1,7 @@
 {
   "network": {
-    "blockchain": "Ethereum",
-    "network": "Ropsten"
+    "blockchain": "Fantom",
+    "network": "Testnet"
   },
   "data_directory": "cli-data",
   "http_timeout": 300,
