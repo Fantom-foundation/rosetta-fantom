@@ -95,11 +95,11 @@ func TestStatus_NotSyncing(t *testing.T) {
 		nil,
 	).Run(
 		func(args mock.Arguments) {
-			header := args.Get(1).(**types.Header)
+			header := args.Get(1).(**blockHeader)
 			file, err := ioutil.ReadFile("testdata/basic_header.json")
 			assert.NoError(t, err)
 
-			*header = new(types.Header)
+			*header = new(blockHeader)
 
 			assert.NoError(t, (*header).UnmarshalJSON(file))
 		},
@@ -216,11 +216,11 @@ func TestStatus_NotSyncing_SkipAdminCalls(t *testing.T) {
 		nil,
 	).Run(
 		func(args mock.Arguments) {
-			header := args.Get(1).(**types.Header)
+			header := args.Get(1).(**blockHeader)
 			file, err := ioutil.ReadFile("testdata/basic_header.json")
 			assert.NoError(t, err)
 
-			*header = new(types.Header)
+			*header = new(blockHeader)
 
 			assert.NoError(t, (*header).UnmarshalJSON(file))
 		},
@@ -292,11 +292,11 @@ func TestStatus_Syncing(t *testing.T) {
 		nil,
 	).Run(
 		func(args mock.Arguments) {
-			header := args.Get(1).(**types.Header)
+			header := args.Get(1).(**blockHeader)
 			file, err := ioutil.ReadFile("testdata/basic_header.json")
 			assert.NoError(t, err)
 
-			*header = new(types.Header)
+			*header = new(blockHeader)
 
 			assert.NoError(t, (*header).UnmarshalJSON(file))
 		},
@@ -418,11 +418,11 @@ func TestStatus_Syncing_SkipAdminCalls(t *testing.T) {
 		nil,
 	).Run(
 		func(args mock.Arguments) {
-			header := args.Get(1).(**types.Header)
+			header := args.Get(1).(**blockHeader)
 			file, err := ioutil.ReadFile("testdata/basic_header.json")
 			assert.NoError(t, err)
 
-			*header = new(types.Header)
+			*header = new(blockHeader)
 
 			assert.NoError(t, (*header).UnmarshalJSON(file))
 		},
@@ -477,6 +477,8 @@ func TestStatus_Syncing_SkipAdminCalls(t *testing.T) {
 	mockGraphQL.AssertExpectations(t)
 }
 
+/*
+// TestBalance relies on the GraphQL ethereum implementation
 func TestBalance(t *testing.T) {
 	mockJSONRPC := &mocks.JSONRPC{}
 	mockGraphQL := &mocks.GraphQL{}
@@ -516,7 +518,7 @@ func TestBalance(t *testing.T) {
 		&RosettaTypes.AccountIdentifier{
 			Address: "0x2f93B2f047E05cdf602820Ac4B3178efc2b43D55",
 		},
-		nil,
+		&RosettaTypes.PartialBlockIdentifier{},
 	)
 	assert.Equal(t, &RosettaTypes.AccountBalanceResponse{
 		BlockIdentifier: &RosettaTypes.BlockIdentifier{
@@ -768,6 +770,7 @@ func TestBalance_InvalidHash(t *testing.T) {
 	mockJSONRPC.AssertExpectations(t)
 	mockGraphQL.AssertExpectations(t)
 }
+ */
 
 func TestCall_GetBlockByNumber(t *testing.T) {
 	mockJSONRPC := &mocks.JSONRPC{}
@@ -1518,14 +1521,14 @@ func TestTransaction_Hash(t *testing.T) {
 		nil,
 	).Run(
 		func(args mock.Arguments) {
-			r := args.Get(1).(**types.Header)
+			r := args.Get(1).(**blockHeader)
 
 			file, err := ioutil.ReadFile(
 				"testdata/block_0xc10a51a3898a85c7165a9d883acc9a68f139934d0cb91dfad4c7d3a7c1a1960d.json",
 			) // nolint
 			assert.NoError(t, err)
 
-			*r = new(types.Header)
+			*r = new(blockHeader)
 
 			assert.NoError(t, (*r).UnmarshalJSON(file))
 		},

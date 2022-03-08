@@ -10,30 +10,6 @@
         },
         "timestamp": 1479731741000,
         "transactions": [
-            {
-                "transaction_identifier": {
-                    "hash": "0xba9ded5ca1ec9adb9451bf062c9de309d9552fa0f0254a7b982d3daf7ae436ae"
-                },
-                "operations": [
-                    {
-                        "operation_identifier": {
-                            "index": 0
-                        },
-                        "type": "MINER_REWARD",
-                        "status": "SUCCESS",
-                        "account": {
-                            "address": "0x334391Aa808257952A462d1475562Ee2106a6C90"
-                        },
-                        "amount": {
-                            "value": "5000000000000000000",
-                            "currency": {
-                                "symbol": "ETH",
-                                "decimals": 18
-                            }
-                        }
-                    }
-                ]
-            }
         ]
     }
 }
