@@ -1,0 +1,14 @@
+{
+  "network_identifier": {
+    "blockchain": "Fantom",
+    "network": "Testnet"
+  },
+  "genesis_block_identifier": {
+    "index": 0,
+    "hash": "0x00000000000003e8c717f00dc4306a6ff72eabc9a6ec6e4a46bf6ba044ca88d2"
+  },
+  "allowed_operation_types": ["MINER_REWARD","UNCLE_REWARD","FEE","CALL","CREATE","CREATE2","SELFDESTRUCT","CALLCODE","DELEGATECALL","STATICCALL","DESTRUCT"],
+  "allowed_operation_statuses": [{"status":"SUCCESS","successful":true},{"status":"FAILURE","successful":false}],
+  "allowed_errors": [{"code":0,"message":"Endpoint not implemented","retriable":false},{"code":1,"message":"Endpoint unavailable offline","retriable":false},{"code":2,"message":"geth error","retriable":false},{"code":3,"message":"unable to decompress public key","retriable":false},{"code":4,"message":"Unable to parse intent","retriable":false},{"code":5,"message":"Unable to parse intermediate result","retriable":false},{"code":6,"message":"Signature invalid","retriable":false},{"code":7,"message":"Unable to broadcast transaction","retriable":false},{"code":8,"message":"Call parameters invalid","retriable":false},{"code":9,"message":"Call output marshal failed","retriable":false},{"code":10,"message":"Call method invalid","retriable":false},{"code":11,"message":"Block orphaned","retriable":true},{"code":12,"message":"Invalid address","retriable":false},{"code":13,"message":"geth not ready","retriable":true},{"code":14,"message":"invalid input","retriable":false}],
+  "allowed_timestamp_start_index": 1
+}

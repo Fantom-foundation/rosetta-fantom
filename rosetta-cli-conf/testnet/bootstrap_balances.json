@@ -1,112 +1,42 @@
 [
  {
   "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000000"
+   "address": "0xe003e080e8d61207a0a9890c3663b4cd7fb766b8"
   },
   "currency": {
-   "symbol": "ETH",
+   "symbol": "FTM",
    "decimals": 18
   },
-  "value": "1"
+  "value": "2000000100000000000000000000"
  },
  {
   "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000001"
+   "address": "0xcc8b10332478e26f676bccfc73f8c687e3ad1d04"
   },
   "currency": {
-   "symbol": "ETH",
+   "symbol": "FTM",
    "decimals": 18
   },
-  "value": "1"
+  "value": "400000000000000000000"
  },
  {
   "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000002"
+   "address": "0x30e3b5cc7e8fb98a22e688dfb20b327be8a9fe30"
   },
   "currency": {
-   "symbol": "ETH",
+   "symbol": "FTM",
    "decimals": 18
   },
-  "value": "1"
+  "value": "400000000000000000000"
  },
  {
   "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000003"
+   "address": "0x567b6f3d4ba1f55652cf90df6db90ad6d8f9abc1"
   },
   "currency": {
    "symbol": "ETH",
    "decimals": 18
   },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000004"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000005"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000006"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000007"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000008"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x0000000000000000000000000000000000000009"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1"
- },
- {
-  "account_identifier": {
-   "address": "0x874B54A8bD152966d63F706BAE1FfeB0411921E5"
-  },
-  "currency": {
-   "symbol": "ETH",
-   "decimals": 18
-  },
-  "value": "1000000000000000000000000000000"
+  "value": "400000000000000000000"
  }
 ]
