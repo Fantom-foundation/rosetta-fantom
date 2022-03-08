@@ -975,48 +975,26 @@ func feeOps(tx *loadedTransaction) []*RosettaTypes.Operation {
 				Currency: Currency,
 			},
 		},
-
-		// mining rewards are in the end of epoch in Fantom
-		/*
-		{
+		// mining rewards are in the end of epoch in Fantom - no related op
+	}
+	if tx.FeeBurned != nil {
+		burntOp := &RosettaTypes.Operation{
 			OperationIdentifier: &RosettaTypes.OperationIdentifier{
 				Index: 1,
-			},
-			RelatedOperations: []*RosettaTypes.OperationIdentifier{
-				{
-					Index: 0,
-				},
 			},
 			Type:   FeeOpType,
 			Status: RosettaTypes.String(SuccessStatus),
 			Account: &RosettaTypes.AccountIdentifier{
-				Address: MustChecksum(tx.Miner),
+				Address: MustChecksum(tx.From.String()),
 			},
 			Amount: &RosettaTypes.Amount{
-				Value:    minerEarnedAmount.String(),
+				Value:    new(big.Int).Neg(tx.FeeBurned).String(),
 				Currency: Currency,
 			},
-		},
-		 */
+		}
+		ops = append(ops, burntOp)
 	}
-	if tx.FeeBurned == nil {
-		return ops
-	}
-	burntOp := &RosettaTypes.Operation{
-		OperationIdentifier: &RosettaTypes.OperationIdentifier{
-			Index: 2, // nolint:gomnd
-		},
-		Type:   FeeOpType,
-		Status: RosettaTypes.String(SuccessStatus),
-		Account: &RosettaTypes.AccountIdentifier{
-			Address: MustChecksum(tx.From.String()),
-		},
-		Amount: &RosettaTypes.Amount{
-			Value:    new(big.Int).Neg(tx.FeeBurned).String(),
-			Currency: Currency,
-		},
-	}
-	return append(ops, burntOp)
+	return ops
 }
 
 // transactionReceipt returns the receipt of a transaction by transaction hash.
