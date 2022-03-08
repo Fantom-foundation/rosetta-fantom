@@ -21,7 +21,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/coinbase/rosetta-ethereum/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )

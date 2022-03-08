@@ -28,7 +28,7 @@ test:
 	${TEST_SCRIPT}
 
 build:
-	docker build -t rosetta-ethereum:latest https://github.com/coinbase/rosetta-ethereum.git
+	docker build -t rosetta-ethereum:latest https://github.com/Fantom-foundation/rosetta-fantom.git
 
 build-local:
 	docker build -t rosetta-ethereum:latest .

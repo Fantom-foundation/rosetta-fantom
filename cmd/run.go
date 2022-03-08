@@ -22,9 +22,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coinbase/rosetta-ethereum/configuration"
-	"github.com/coinbase/rosetta-ethereum/ethereum"
-	"github.com/coinbase/rosetta-ethereum/services"
+	"github.com/Fantom-foundation/rosetta-fantom/configuration"
+	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/services"
 
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/server"

@@ -17,7 +17,7 @@ package services
 import (
 	"context"
 
-	"github.com/coinbase/rosetta-ethereum/configuration"
+	"github.com/Fantom-foundation/rosetta-fantom/configuration"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )

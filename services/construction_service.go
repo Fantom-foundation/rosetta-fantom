@@ -21,8 +21,8 @@ import (
 	"math/big"
 	"strconv"
 
-	"github.com/coinbase/rosetta-ethereum/configuration"
-	"github.com/coinbase/rosetta-ethereum/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/configuration"
+	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
 
 	"github.com/ethereum/go-ethereum/common"
 	ethTypes "github.com/ethereum/go-ethereum/core/types"

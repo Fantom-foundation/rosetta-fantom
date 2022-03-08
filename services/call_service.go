@@ -18,8 +18,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/coinbase/rosetta-ethereum/configuration"
-	"github.com/coinbase/rosetta-ethereum/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/configuration"
+	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
