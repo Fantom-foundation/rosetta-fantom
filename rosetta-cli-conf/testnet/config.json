@@ -22,11 +22,10 @@
     }
   },
   "data": {
-    "historical_balance_disabled": false,
-    "start_index": 8296714,
+    "start_index": 4564030,
     "initial_balance_fetch_disabled": false,
-    "active_reconciliation_concurrency": 32,
-    "bootstrap_balances": "bootstrap_balances.json",
+    "bootstrap_balances": "balances-4564030.json",
+    "exempt_accounts": "exempt_accounts.json",
     "end_conditions": {
       "reconciliation_coverage": {
         "coverage": 0.95,

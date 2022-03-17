@@ -16,6 +16,7 @@ package services
 
 import (
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"log"
 )
 
 var (
@@ -158,6 +159,8 @@ var (
 // to do this so that we don't accidentially overrwrite the standard
 // errors.
 func wrapErr(rErr *types.Error, err error) *types.Error {
+	log.Printf("err: %s\n", err)
+
 	newErr := &types.Error{
 		Code:      rErr.Code,
 		Message:   rErr.Message,
