@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ethereum
+package opera
 
 import (
 	"bufio"
@@ -28,12 +28,12 @@ import (
 )
 
 const (
-	gethLogger       = "geth"
-	gethStdErrLogger = "geth err"
+	operaLogger       = "opera"
+	operaStdErrLogger = "opera err"
 )
 
-// logPipe prints out logs from geth. We don't end when context
-// is canceled beacause there are often logs printed after this.
+// logPipe prints out logs from Opera. We don't end when context
+// is canceled because there are often logs printed after this.
 func logPipe(pipe io.ReadCloser, identifier string) error {
 	reader := bufio.NewReader(pipe)
 	for {
@@ -48,12 +48,12 @@ func logPipe(pipe io.ReadCloser, identifier string) error {
 	}
 }
 
-// StartGeth starts a geth daemon in another goroutine
+// StartOpera starts Opera daemon in another goroutine
 // and logs the results to the console.
-func StartGeth(ctx context.Context, arguments string, g *errgroup.Group) error {
+func StartOpera(ctx context.Context, arguments string, g *errgroup.Group) error {
 	parsedArgs := strings.Split(arguments, " ")
 	cmd := exec.Command(
-		"/app/geth",
+		"/app/opera",
 		parsedArgs...,
 	) // #nosec G204
 
@@ -68,21 +68,21 @@ func StartGeth(ctx context.Context, arguments string, g *errgroup.Group) error {
 	}
 
 	g.Go(func() error {
-		return logPipe(stdout, gethLogger)
+		return logPipe(stdout, operaLogger)
 	})
 
 	g.Go(func() error {
-		return logPipe(stderr, gethStdErrLogger)
+		return logPipe(stderr, operaStdErrLogger)
 	})
 
 	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("%w: unable to start geth", err)
+		return fmt.Errorf("%w: unable to start Opera", err)
 	}
 
 	g.Go(func() error {
 		<-ctx.Done()
 
-		log.Println("sending interrupt to geth")
+		log.Println("sending interrupt to Opera")
 		return cmd.Process.Signal(os.Interrupt)
 	})
 

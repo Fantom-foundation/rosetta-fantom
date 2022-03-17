@@ -5,7 +5,7 @@
 
 ADDLICENSE_INSTALL=go install github.com/google/addlicense@latest
 ADDLICENSE_CMD=addlicense
-ADDLICENCE_SCRIPT=${ADDLICENSE_CMD} -c "Coinbase, Inc." -l "apache" -v
+ADDLICENCE_SCRIPT=${ADDLICENSE_CMD} -c "Fantom Foundation, Coinbase, Inc." -l "apache" -v
 SPELLCHECK_CMD=go run github.com/client9/misspell/cmd/misspell
 GOLINES_INSTALL=go install github.com/segmentio/golines@latest
 GOLINES_CMD=golines
@@ -14,7 +14,7 @@ GOLINT_CMD=golint
 GOVERALLS_INSTALL=go install github.com/mattn/goveralls@latest
 GOVERALLS_CMD=goveralls
 GOIMPORTS_CMD=go run golang.org/x/tools/cmd/goimports
-GO_PACKAGES=./services/... ./cmd/... ./configuration/... ./ethereum/... 
+GO_PACKAGES=./services/... ./cmd/... ./configuration/... ./opera/...
 GO_FOLDERS=$(shell echo ${GO_PACKAGES} | sed -e "s/\.\///g" | sed -e "s/\/\.\.\.//g")
 TEST_SCRIPT=go test ${GO_PACKAGES}
 LINT_SETTINGS=golint,misspell,gocyclo,gocritic,whitespace,goconst,gocognit,bodyclose,unconvert,lll,unparam
@@ -28,40 +28,40 @@ test:
 	${TEST_SCRIPT}
 
 build:
-	docker build -t rosetta-ethereum:latest https://github.com/Fantom-foundation/rosetta-fantom.git
+	docker build -t rosetta-fantom:latest https://github.com/Fantom-foundation/rosetta-fantom.git
 
 build-local:
-	docker build -t rosetta-ethereum:latest .
+	docker build -t rosetta-fantom:latest .
 
 build-release:
 	# make sure to always set version with vX.X.X
-	docker build -t rosetta-ethereum:$(version) .;
-	docker save rosetta-ethereum:$(version) | gzip > rosetta-ethereum-$(version).tar.gz;
+	docker build -t rosetta-fantom:$(version) .;
+	docker save rosetta-fantom:$(version) | gzip > rosetta-fantom-$(version).tar.gz;
 
 update-tracer:
-	curl https://raw.githubusercontent.com/ethereum/go-ethereum/master/eth/tracers/js/internal/tracers/call_tracer_js.js -o ethereum/call_tracer.js
+	curl https://raw.githubusercontent.com/ethereum/go-ethereum/master/eth/tracers/js/internal/tracers/call_tracer_js.js -o opera/call_tracer.js
 
 update-bootstrap-balances:
 	go run main.go utils:generate-bootstrap ethereum/genesis_files/mainnet.json rosetta-cli-conf/mainnet/bootstrap_balances.json;
 	go run main.go utils:generate-bootstrap ethereum/genesis_files/testnet.json rosetta-cli-conf/testnet/bootstrap_balances.json;
 
 run-mainnet-online:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/ethereum-data:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 30303:30303 rosetta-ethereum:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
 
 run-mainnet-offline:
-	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=MAINNET" -e "PORT=8081" -p 8081:8081 rosetta-ethereum:latest
+	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=MAINNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest
 
 run-testnet-online:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/ethereum-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 30303:30303 rosetta-ethereum:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
 
 run-testnet-offline:
-	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=TESTNET" -e "PORT=8081" -p 8081:8081 rosetta-ethereum:latest
+	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=TESTNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest
 
 run-mainnet-remote:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -e "GETH=$(geth)" -p 8080:8080 -p 30303:30303 rosetta-ethereum:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -e "OPERA=$(opera)" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
 
 run-testnet-remote:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -e "GETH=$(geth)" -p 8080:8080 -p 30303:30303 rosetta-ethereum:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -e "OPERA=$(opera)" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
 
 check-comments:
 	${GOLINT_INSTALL}
@@ -107,6 +107,6 @@ coverage-local:
 mocks:
 	rm -rf mocks;
 	mockery --dir services --all --case underscore --outpkg services --output mocks/services;
-	mockery --dir ethereum --all --case underscore --outpkg ethereum --output mocks/ethereum;
+	mockery --dir opera --all --case underscore --outpkg ethereum --output mocks/opera;
 	${ADDLICENSE_INSTALL}
 	${ADDLICENCE_SCRIPT} .;

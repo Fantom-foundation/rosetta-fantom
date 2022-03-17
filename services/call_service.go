@@ -19,7 +19,7 @@ import (
 	"errors"
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -48,17 +48,17 @@ func (s *CallAPIService) Call(
 	}
 
 	response, err := s.client.Call(ctx, request)
-	if errors.Is(err, ethereum.ErrCallParametersInvalid) {
+	if errors.Is(err, opera.ErrCallParametersInvalid) {
 		return nil, wrapErr(ErrCallParametersInvalid, err)
 	}
-	if errors.Is(err, ethereum.ErrCallOutputMarshal) {
+	if errors.Is(err, opera.ErrCallOutputMarshal) {
 		return nil, wrapErr(ErrCallOutputMarshal, err)
 	}
-	if errors.Is(err, ethereum.ErrCallMethodInvalid) {
+	if errors.Is(err, opera.ErrCallMethodInvalid) {
 		return nil, wrapErr(ErrCallMethodInvalid, err)
 	}
 	if err != nil {
-		return nil, wrapErr(ErrGeth, err)
+		return nil, wrapErr(ErrOpera, err)
 	}
 
 	return response, nil

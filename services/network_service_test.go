@@ -19,7 +19,7 @@ import (
 	"testing"
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 	mocks "github.com/Fantom-foundation/rosetta-fantom/mocks/services"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -35,17 +35,17 @@ var (
 			MiddlewareVersion: &middlewareVersion,
 		},
 		Allow: &types.Allow{
-			OperationStatuses:       ethereum.OperationStatuses,
-			OperationTypes:          ethereum.OperationTypes,
+			OperationStatuses:       opera.OperationStatuses,
+			OperationTypes:          opera.OperationTypes,
 			Errors:                  Errors,
-			HistoricalBalanceLookup: ethereum.HistoricalBalanceSupported,
-			CallMethods:             ethereum.CallMethods,
+			HistoricalBalanceLookup: opera.HistoricalBalanceSupported,
+			CallMethods:             opera.CallMethods,
 		},
 	}
 
 	networkIdentifier = &types.NetworkIdentifier{
-		Network:    ethereum.MainnetNetwork,
-		Blockchain: ethereum.Blockchain,
+		Network:    opera.MainnetNetwork,
+		Blockchain: opera.Blockchain,
 	}
 )
 
@@ -80,7 +80,7 @@ func TestNetworkEndpoints_Online(t *testing.T) {
 	cfg := &configuration.Configuration{
 		Mode:                   configuration.Online,
 		Network:                networkIdentifier,
-		GenesisBlockIdentifier: ethereum.MainnetGenesisBlockIdentifier,
+		GenesisBlockIdentifier: opera.FantomMainnetGenesisBlockIdentifier,
 	}
 	mockClient := &mocks.Client{}
 	servicer := NewNetworkAPIService(cfg, mockClient)
@@ -122,7 +122,7 @@ func TestNetworkEndpoints_Online(t *testing.T) {
 	networkStatus, err := servicer.NetworkStatus(ctx, nil)
 	assert.Nil(t, err)
 	assert.Equal(t, &types.NetworkStatusResponse{
-		GenesisBlockIdentifier: ethereum.MainnetGenesisBlockIdentifier,
+		GenesisBlockIdentifier: opera.FantomMainnetGenesisBlockIdentifier,
 		CurrentBlockIdentifier: currentBlock,
 		CurrentBlockTimestamp:  currentTime,
 		Peers:                  peers,

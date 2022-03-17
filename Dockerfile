@@ -33,21 +33,21 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
-# Compile geth
-FROM golang-builder as geth-builder
+# Compile Opera
+FROM golang-builder as opera-builder
 
-# VERSION: go-ethereum v.1.10.8
-RUN git clone https://github.com/ethereum/go-ethereum \
-  && cd go-ethereum \
-  && git checkout 26675454bf93bf904be7a43cce6b3f550115ff90
+# VERSION: go-opera v1.1.0-rc.4
+RUN git clone https://github.com/Fantom-foundation/go-opera \
+  && cd go-opera \
+  && git checkout 8d3ee1a192057046a1eb3befbe985aa9c4d7147d
 
-RUN cd go-ethereum \
-  && make geth
+RUN cd go-opera \
+  && make
 
-RUN mv go-ethereum/build/bin/geth /app/geth \
-  && rm -rf go-ethereum
+RUN mv go-opera/build/opera /app/opera \
+  && rm -rf go-opera
 
-# Compile rosetta-ethereum
+# Compile rosetta-fantom
 FROM golang-builder as rosetta-builder
 
 # Use native remote build context to build in any directory
@@ -55,10 +55,10 @@ COPY . src
 RUN cd src \
   && go build
 
-RUN mv src/rosetta-ethereum /app/rosetta-ethereum \
-  && mkdir /app/ethereum \
-  && mv src/ethereum/call_tracer.js /app/ethereum/call_tracer.js \
-  && mv src/ethereum/geth.toml /app/ethereum/geth.toml \
+RUN mv src/rosetta-fantom /app/rosetta-fantom \
+  && mkdir /app/client \
+  && mv src/opera/call_tracer.js /app/opera/call_tracer.js \
+  && mv src/opera/opera.toml /app/opera/opera.toml \
   && rm -rf src
 
 ## Build Final Image
@@ -73,14 +73,14 @@ RUN mkdir -p /app \
 
 WORKDIR /app
 
-# Copy binary from geth-builder
-COPY --from=geth-builder /app/geth /app/geth
+# Copy binary from opera-builder
+COPY --from=opera-builder /app/opera /app/opera
 
 # Copy binary from rosetta-builder
-COPY --from=rosetta-builder /app/ethereum /app/ethereum
-COPY --from=rosetta-builder /app/rosetta-ethereum /app/rosetta-ethereum
+COPY --from=rosetta-builder /app/client /app/client
+COPY --from=rosetta-builder /app/rosetta-fantom /app/rosetta-fantom
 
 # Set permissions for everything added to /app
 RUN chmod -R 755 /app/*
 
-CMD ["/app/rosetta-ethereum", "run"]
+CMD ["/app/rosetta-fantom", "run"]

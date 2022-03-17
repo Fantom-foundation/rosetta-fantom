@@ -21,7 +21,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/assert"
@@ -29,11 +29,11 @@ import (
 
 func TestLoadConfiguration(t *testing.T) {
 	tests := map[string]struct {
-		Mode          string
-		Network       string
-		Port          string
-		Geth          string
-		SkipGethAdmin string
+		Mode      string
+		Network   string
+		Port      string
+		Opera     string
+		SkipAdmin string
 
 		cfg *Configuration
 		err error
@@ -51,61 +51,61 @@ func TestLoadConfiguration(t *testing.T) {
 			err:     errors.New("PORT must be populated"),
 		},
 		"all set (mainnet)": {
-			Mode:          string(Online),
-			Network:       Mainnet,
-			Port:          "1000",
-			SkipGethAdmin: "FALSE",
+			Mode:      string(Online),
+			Network:   Mainnet,
+			Port:      "1000",
+			SkipAdmin: "FALSE",
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
-					Network:    ethereum.MainnetNetwork,
-					Blockchain: ethereum.Blockchain,
+					Network:    opera.MainnetNetwork,
+					Blockchain: opera.Blockchain,
 				},
-				GenesisBlockIdentifier: ethereum.FantomMainnetGenesisBlockIdentifier,
+				GenesisBlockIdentifier: opera.FantomMainnetGenesisBlockIdentifier,
 				Port:                   1000,
-				GethURL:                DefaultGethURL,
-				GethArguments:          ethereum.MainnetGethArguments,
-				SkipGethAdmin:          false,
+				OperaURL:               DefaultOperaURL,
+				OperaArguments:         opera.MainnetOperaArguments,
+				SkipAdmin:              false,
 				ChainID:                big.NewInt(0xFA),
 			},
 		},
-		"all set (mainnet) + geth": {
-			Mode:          string(Online),
-			Network:       Mainnet,
-			Port:          "1000",
-			Geth:          "http://blah",
-			SkipGethAdmin: "TRUE",
+		"all set (mainnet) + opera": {
+			Mode:      string(Online),
+			Network:   Mainnet,
+			Port:      "1000",
+			Opera:     "http://blah",
+			SkipAdmin: "TRUE",
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
-					Network:    ethereum.MainnetNetwork,
-					Blockchain: ethereum.Blockchain,
+					Network:    opera.MainnetNetwork,
+					Blockchain: opera.Blockchain,
 				},
-				GenesisBlockIdentifier: ethereum.FantomMainnetGenesisBlockIdentifier,
+				GenesisBlockIdentifier: opera.FantomMainnetGenesisBlockIdentifier,
 				Port:                   1000,
-				GethURL:                "http://blah",
-				RemoteGeth:             true,
-				GethArguments:          ethereum.MainnetGethArguments,
-				SkipGethAdmin:          true,
+				OperaURL:               "http://blah",
+				RemoteOpera:            true,
+				OperaArguments:         opera.MainnetOperaArguments,
+				SkipAdmin:              true,
 				ChainID:                big.NewInt(0xFA),
 			},
 		},
 		"all set (testnet)": {
-			Mode:          string(Online),
-			Network:       Testnet,
-			Port:          "1000",
-			SkipGethAdmin: "TRUE",
+			Mode:      string(Online),
+			Network:   Testnet,
+			Port:      "1000",
+			SkipAdmin: "TRUE",
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
-					Network:    ethereum.TestnetNetwork,
-					Blockchain: ethereum.Blockchain,
+					Network:    opera.TestnetNetwork,
+					Blockchain: opera.Blockchain,
 				},
-				GenesisBlockIdentifier: ethereum.FantomTestnetGenesisBlockIdentifier,
+				GenesisBlockIdentifier: opera.FantomTestnetGenesisBlockIdentifier,
 				Port:                   1000,
-				GethURL:                DefaultGethURL,
-				GethArguments:          ethereum.TestnetGethArguments,
-				SkipGethAdmin:          true,
+				OperaURL:               DefaultOperaURL,
+				OperaArguments:         opera.TestnetOperaArguments,
+				SkipAdmin:              true,
 				ChainID:                big.NewInt(0xFA2),
 			},
 		},
@@ -134,8 +134,8 @@ func TestLoadConfiguration(t *testing.T) {
 			os.Setenv(ModeEnv, test.Mode)
 			os.Setenv(NetworkEnv, test.Network)
 			os.Setenv(PortEnv, test.Port)
-			os.Setenv(GethEnv, test.Geth)
-			os.Setenv(SkipGethAdminEnv, test.SkipGethAdmin)
+			os.Setenv(OperaEnv, test.Opera)
+			os.Setenv(SkipAdminEnv, test.SkipAdmin)
 
 			cfg, err := LoadConfiguration()
 			if test.err != nil {

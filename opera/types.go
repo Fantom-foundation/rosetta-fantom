@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ethereum
+package opera
 
 import (
 	"context"
-	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
 )
 
 const (
-	// NodeVersion is the version of geth we are using.
-	NodeVersion = "1.9.24"
+	// NodeVersion is the version of opera we are using.
+	NodeVersion = "1.1.0-rc.4"
 
 	// Blockchain is Fantom.
 	Blockchain string = "Fantom"
@@ -46,14 +44,6 @@ const (
 	// Decimals is the decimals value
 	// used in Currency.
 	Decimals = 18
-
-	// MinerRewardOpType is used to describe
-	// a miner block reward.
-	MinerRewardOpType = "MINER_REWARD"
-
-	// UncleRewardOpType is used to describe
-	// an uncle block reward.
-	UncleRewardOpType = "UNCLE_REWARD"
 
 	// FeeOpType is used to represent fee operations.
 	FeeOpType = "FEE"
@@ -96,14 +86,6 @@ const (
 	// historical balance is supported.
 	HistoricalBalanceSupported = true
 
-	// UnclesRewardMultiplier is the uncle reward
-	// multiplier.
-	UnclesRewardMultiplier = 32
-
-	// MaxUncleDepth is the maximum depth for
-	// an uncle to be rewarded.
-	MaxUncleDepth = 8
-
 	// GenesisBlockIndex is the index of the
 	// genesis block.
 	GenesisBlockIndex = int64(0)
@@ -112,10 +94,13 @@ const (
 	// of a transfer.
 	TransferGasLimit = int64(21000) //nolint:gomnd
 
-	// MainnetGethArguments are the arguments to start a mainnet geth instance.
-	MainnetGethArguments = `--config=/app/ethereum/geth.toml --gcmode=archive --graphql`
+	// MainnetOperaArguments are the arguments to start a mainnet Opera instance.
+	MainnetOperaArguments = `--config=/app/ethereum/opera.toml --genesis=/data/genesis.g`
 
-	// IncludeMempoolCoins does not apply to rosetta-ethereum as it is not UTXO-based.
+	// TestnetOperaArguments are the arguments to start a testnet Opera instance.
+	TestnetOperaArguments = `--config=/app/ethereum/opera.toml --genesis=/data/testnet.g`
+
+	// IncludeMempoolCoins does not apply to rosetta-fantom as it is not UTXO-based.
 	IncludeMempoolCoins = false
 )
 
@@ -128,48 +113,17 @@ var (
 )
 
 var (
-	// TestnetGethArguments are the arguments to start a ropsten geth instance.
-	TestnetGethArguments = fmt.Sprintf("%s --ropsten", MainnetGethArguments)
-
 	// FantomMainnetGenesisBlockIdentifier is the *types.BlockIdentifier
 	// of the mainnet genesis block.
 	FantomMainnetGenesisBlockIdentifier = &types.BlockIdentifier{
 		Hash:  FantomMainnetGenesisHash.Hex(),
-		Index: GenesisBlockIndex, // TODO?
+		Index: GenesisBlockIndex,
 	}
 
 	// FantomTestnetGenesisBlockIdentifier is the *types.BlockIdentifier
 	// of the mainnet genesis block.
 	FantomTestnetGenesisBlockIdentifier = &types.BlockIdentifier{
 		Hash:  FantomTestnetGenesisHash.Hex(),
-		Index: GenesisBlockIndex, // TODO?
-	}
-
-	// MainnetGenesisBlockIdentifier is the *types.BlockIdentifier
-	// of the mainnet genesis block.
-	MainnetGenesisBlockIdentifier = &types.BlockIdentifier{
-		Hash:  params.MainnetGenesisHash.Hex(),
-		Index: GenesisBlockIndex,
-	}
-
-	// RopstenGenesisBlockIdentifier is the *types.BlockIdentifier
-	// of the Ropsten genesis block.
-	RopstenGenesisBlockIdentifier = &types.BlockIdentifier{
-		Hash:  params.RopstenGenesisHash.Hex(),
-		Index: GenesisBlockIndex,
-	}
-
-	// RinkebyGenesisBlockIdentifier is the *types.BlockIdentifier
-	// of the Ropsten genesis block.
-	RinkebyGenesisBlockIdentifier = &types.BlockIdentifier{
-		Hash:  params.RinkebyGenesisHash.Hex(),
-		Index: GenesisBlockIndex,
-	}
-
-	// GoerliGenesisBlockIdentifier is the *types.BlockIdentifier
-	// of the Goerli genesis block.
-	GoerliGenesisBlockIdentifier = &types.BlockIdentifier{
-		Hash:  params.GoerliGenesisHash.Hex(),
 		Index: GenesisBlockIndex,
 	}
 
@@ -182,8 +136,6 @@ var (
 
 	// OperationTypes are all suppoorted operation types.
 	OperationTypes = []string{
-		MinerRewardOpType,
-		UncleRewardOpType,
 		FeeOpType,
 		CallOpType,
 		CreateOpType,

@@ -25,7 +25,7 @@ var (
 	Errors = []*types.Error{
 		ErrUnimplemented,
 		ErrUnavailableOffline,
-		ErrGeth,
+		ErrOpera,
 		ErrUnableToDecompressPubkey,
 		ErrUnclearIntent,
 		ErrUnableToParseIntermediateResult,
@@ -36,7 +36,7 @@ var (
 		ErrCallMethodInvalid,
 		ErrBlockOrphaned,
 		ErrInvalidAddress,
-		ErrGethNotReady,
+		ErrOperaNotReady,
 		ErrInvalidInput,
 	}
 
@@ -54,11 +54,10 @@ var (
 		Message: "Endpoint unavailable offline",
 	}
 
-	// ErrGeth is returned when geth
-	// errors on a request.
-	ErrGeth = &types.Error{
+	// ErrOpera is returned when Opera errors on a request.
+	ErrOpera = &types.Error{
 		Code:    2, //nolint
-		Message: "geth error",
+		Message: "Opera error",
 	}
 
 	// ErrUnableToDecompressPubkey is returned when
@@ -139,11 +138,10 @@ var (
 		Message: "Invalid address",
 	}
 
-	// ErrGethNotReady is returned when geth
-	// cannot yet serve any queries.
-	ErrGethNotReady = &types.Error{
+	// ErrOperaNotReady is returned when Opera cannot yet serve any queries.
+	ErrOperaNotReady = &types.Error{
 		Code:      13, //nolint
-		Message:   "geth not ready",
+		Message:   "Opera not ready",
 		Retriable: true,
 	}
 

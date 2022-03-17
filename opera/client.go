@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ethereum
+package opera
 
 import (
 	"context"
@@ -38,7 +38,7 @@ import (
 )
 
 const (
-	gethHTTPTimeout = 120 * time.Second
+	operaHTTPTimeout = 120 * time.Second
 
 	maxTraceConcurrency  = int64(16) // nolint:gomnd
 	semaphoreTraceWeight = int64(1)  // nolint:gomnd
@@ -67,7 +67,7 @@ type Client struct {
 // NewClient creates a Client that from the provided url and params.
 func NewClient(url string, skipAdminCalls bool) (*Client, error) {
 	c, err := rpc.DialHTTPWithClient(url, &http.Client{
-		Timeout: gethHTTPTimeout,
+		Timeout: operaHTTPTimeout,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("%w: unable to dial node", err)
@@ -91,7 +91,7 @@ func (ec *Client) Close() {
 	ec.c.Close()
 }
 
-// Status returns geth status information
+// Status returns opera status information
 // for determining node healthiness.
 func (ec *Client) Status(ctx context.Context) (
 	*RosettaTypes.BlockIdentifier,
@@ -473,7 +473,7 @@ func (ec *Client) getBlock(
 	//
 	// We fetch traces last because we want to avoid limiting the number of other
 	// block-related data fetches we perform concurrently (we limit the number of
-	// concurrent traces that are computed to 16 to avoid overwhelming geth).
+	// concurrent traces that are computed to 16 to avoid the node overwhelming).
 	var traces []*rpcCall
 	var rawTraces []*rpcRawCall
 	var addTraces bool
@@ -1435,8 +1435,8 @@ func (ec *Client) Call(
 			return nil, err
 		}
 
-		// We cannot use RosettaTypes.MarshalMap because geth uses a custom
-		// marshaler to convert *types.Receipt to JSON.
+		// We cannot use RosettaTypes.MarshalMap because Opera (as Geth) uses a custom
+		// marshaller to convert *types.Receipt to JSON.
 		jsonOutput, err := receipt.MarshalJSON()
 		if err != nil {
 			return nil, fmt.Errorf("%w: %s", ErrCallOutputMarshal, err.Error())
@@ -1475,7 +1475,7 @@ func (ec *Client) Call(
 }
 
 // txPoolContentResponse represents the response for a call to
-// geth node on the "txpool_content" method.
+// opera node on the "txpool_content" method.
 type txPoolContentResponse struct {
 	Pending txPool `json:"pending"`
 	Queued  txPool `json:"queued"`

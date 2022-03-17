@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ethereum
+package opera
 
 import (
 	"bytes"
@@ -32,8 +32,7 @@ const (
 	graphQLPath                  = "graphql"
 )
 
-// GraphQLClient is a client used to make graphQL
-// queries to geth's graphql endpoint.
+// GraphQLClient is a client used to make graphQL queries.
 type GraphQLClient struct {
 	client *http.Client
 	url    string

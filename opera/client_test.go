@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ethereum
+package opera
 
 import (
 	"context"
@@ -25,7 +25,7 @@ import (
 	"sort"
 	"testing"
 
-	mocks "github.com/Fantom-foundation/rosetta-fantom/mocks/ethereum"
+	mocks "github.com/Fantom-foundation/rosetta-fantom/mocks/opera"
 
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/ethereum/go-ethereum"

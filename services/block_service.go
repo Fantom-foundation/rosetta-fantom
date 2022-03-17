@@ -19,7 +19,7 @@ import (
 	"errors"
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -51,11 +51,11 @@ func (s *BlockAPIService) Block(
 	}
 
 	block, err := s.client.Block(ctx, request.BlockIdentifier)
-	if errors.Is(err, ethereum.ErrBlockOrphaned) {
+	if errors.Is(err, opera.ErrBlockOrphaned) {
 		return nil, wrapErr(ErrBlockOrphaned, err)
 	}
 	if err != nil {
-		return nil, wrapErr(ErrGeth, err)
+		return nil, wrapErr(ErrOpera, err)
 	}
 
 	return &types.BlockResponse{
@@ -74,7 +74,7 @@ func (s *BlockAPIService) BlockTransaction(
 
 	tx, err := s.client.Transaction(ctx, request.BlockIdentifier, request.TransactionIdentifier)
 	if err != nil {
-		return nil, wrapErr(ErrGeth, err)
+		return nil, wrapErr(ErrOpera, err)
 	}
 
 	return &types.BlockTransactionResponse{

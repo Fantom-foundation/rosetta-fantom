@@ -54,7 +54,7 @@ func (s *AccountAPIService) AccountBalance(
 		request.BlockIdentifier,
 	)
 	if err != nil {
-		return nil, wrapErr(ErrGeth, err)
+		return nil, wrapErr(ErrOpera, err)
 	}
 
 	return balanceResponse, nil

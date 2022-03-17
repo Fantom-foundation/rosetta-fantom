@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 	"github.com/Fantom-foundation/rosetta-fantom/services"
 
 	"github.com/coinbase/rosetta-sdk-go/asserter"
@@ -51,7 +51,7 @@ const (
 var (
 	runCmd = &cobra.Command{
 		Use:   "run",
-		Short: "Run rosetta-ethereum",
+		Short: "Run rosetta-fantom",
 		RunE:  runRunCmd,
 	}
 )
@@ -65,11 +65,11 @@ func runRunCmd(cmd *cobra.Command, args []string) error {
 	// The asserter automatically rejects incorrectly formatted
 	// requests.
 	asserter, err := asserter.NewServer(
-		ethereum.OperationTypes,
-		ethereum.HistoricalBalanceSupported,
+		opera.OperationTypes,
+		opera.HistoricalBalanceSupported,
 		[]*types.NetworkIdentifier{cfg.Network},
-		ethereum.CallMethods,
-		ethereum.IncludeMempoolCoins,
+		opera.CallMethods,
+		opera.IncludeMempoolCoins,
 		"",
 	)
 	if err != nil {
@@ -83,16 +83,16 @@ func runRunCmd(cmd *cobra.Command, args []string) error {
 
 	g, ctx := errgroup.WithContext(ctx)
 
-	var client *ethereum.Client
+	var client *opera.Client
 	if cfg.Mode == configuration.Online {
-		if !cfg.RemoteGeth {
+		if !cfg.RemoteOpera {
 			g.Go(func() error {
-				return ethereum.StartGeth(ctx, cfg.GethArguments, g)
+				return opera.StartOpera(ctx, cfg.OperaArguments, g)
 			})
 		}
 
 		var err error
-		client, err = ethereum.NewClient(cfg.GethURL, cfg.SkipGethAdmin)
+		client, err = opera.NewClient(cfg.OperaURL, cfg.SkipAdmin)
 		if err != nil {
 			return fmt.Errorf("%w: cannot initialize ethereum client", err)
 		}
@@ -127,7 +127,7 @@ func runRunCmd(cmd *cobra.Command, args []string) error {
 
 	err = g.Wait()
 	if SignalReceived {
-		return errors.New("rosetta-ethereum halted")
+		return errors.New("rosetta-fantom halted")
 	}
 
 	return err

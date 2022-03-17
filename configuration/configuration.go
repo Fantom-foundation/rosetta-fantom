@@ -21,7 +21,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -45,10 +45,6 @@ const (
 	// Testnet is the Fantom Testnet.
 	Testnet string = "TESTNET"
 
-	// DataDirectory is the default location for all
-	// persistent data.
-	DataDirectory = "/data"
-
 	// ModeEnv is the environment variable read
 	// to determine mode.
 	ModeEnv = "MODE"
@@ -62,22 +58,22 @@ const (
 	// implementation.
 	PortEnv = "PORT"
 
-	// GethEnv is an optional environment variable
-	// used to connect rosetta-ethereum to an already
-	// running geth node.
-	GethEnv = "GETH"
+	// OperaEnv is an optional environment variable
+	// used to connect rosetta-fantom to an already
+	// running Opera node.
+	OperaEnv = "OPERA"
 
-	// DefaultGethURL is the default URL for
-	// a running geth node. This is used
-	// when GethEnv is not populated.
-	DefaultGethURL = "http://localhost:8545"
+	// DefaultOperaURL is the default URL for
+	// a running Opera node. This is used
+	// when OperaEnv is not populated.
+	DefaultOperaURL = "http://localhost:18545"
 
-	// SkipGethAdminEnv is an optional environment variable
-	// to skip geth `admin` calls which are typically not supported
-	// by hosted node services. When not set, defaults to false.
-	SkipGethAdminEnv = "SKIP_GETH_ADMIN"
+	// SkipAdminEnv is an optional environment variable
+	// to skip RPC `admin` calls which are typically not supported
+	// by hosted node services. When not set, defaults to true.
+	SkipAdminEnv = "SKIP_ADMIN"
 
-	// MiddlewareVersion is the version of rosetta-ethereum.
+	// MiddlewareVersion is the version of rosetta-fantom.
 	MiddlewareVersion = "0.0.4"
 )
 
@@ -86,11 +82,11 @@ type Configuration struct {
 	Mode                   Mode
 	Network                *types.NetworkIdentifier
 	GenesisBlockIdentifier *types.BlockIdentifier
-	GethURL                string
-	RemoteGeth             bool
+	OperaURL               string
+	RemoteOpera            bool
 	Port                   int
-	GethArguments          string
-	SkipGethAdmin          bool
+	OperaArguments         string
+	SkipAdmin              bool
 	ChainID                *big.Int
 }
 
@@ -115,41 +111,41 @@ func LoadConfiguration() (*Configuration, error) {
 	switch networkValue {
 	case Mainnet:
 		config.Network = &types.NetworkIdentifier{
-			Blockchain: ethereum.Blockchain,
-			Network:    ethereum.MainnetNetwork,
+			Blockchain: opera.Blockchain,
+			Network:    opera.MainnetNetwork,
 		}
-		config.GenesisBlockIdentifier = ethereum.FantomMainnetGenesisBlockIdentifier
+		config.GenesisBlockIdentifier = opera.FantomMainnetGenesisBlockIdentifier
 		config.ChainID = big.NewInt(0xFA)
-		config.GethArguments = ethereum.MainnetGethArguments
+		config.OperaArguments = opera.MainnetOperaArguments
 	case Testnet:
 		config.Network = &types.NetworkIdentifier{
-			Blockchain: ethereum.Blockchain,
-			Network:    ethereum.TestnetNetwork,
+			Blockchain: opera.Blockchain,
+			Network:    opera.TestnetNetwork,
 		}
-		config.GenesisBlockIdentifier = ethereum.FantomTestnetGenesisBlockIdentifier
+		config.GenesisBlockIdentifier = opera.FantomTestnetGenesisBlockIdentifier
 		config.ChainID = big.NewInt(0xFA2)
-		config.GethArguments = ethereum.TestnetGethArguments
+		config.OperaArguments = opera.TestnetOperaArguments
 	case "":
 		return nil, errors.New("NETWORK must be populated")
 	default:
 		return nil, fmt.Errorf("%s is not a valid network", networkValue)
 	}
 
-	config.GethURL = DefaultGethURL
-	envGethURL := os.Getenv(GethEnv)
-	if len(envGethURL) > 0 {
-		config.RemoteGeth = true
-		config.GethURL = envGethURL
+	config.OperaURL = DefaultOperaURL
+	envOperaURL := os.Getenv(OperaEnv)
+	if len(envOperaURL) > 0 {
+		config.RemoteOpera = true
+		config.OperaURL = envOperaURL
 	}
 
-	config.SkipGethAdmin = false
-	envSkipGethAdmin := os.Getenv(SkipGethAdminEnv)
-	if len(envSkipGethAdmin) > 0 {
-		val, err := strconv.ParseBool(envSkipGethAdmin)
+	config.SkipAdmin = false
+	envSkipAdmin := os.Getenv(SkipAdminEnv)
+	if len(envSkipAdmin) > 0 {
+		val, err := strconv.ParseBool(envSkipAdmin)
 		if err != nil {
-			return nil, fmt.Errorf("%w: unable to parse SKIP_GETH_ADMIN %s", err, envSkipGethAdmin)
+			return nil, fmt.Errorf("%w: unable to parse SKIP_ADMIN %s", err, envSkipAdmin)
 		}
-		config.SkipGethAdmin = val
+		config.SkipAdmin = val
 	}
 
 	portValue := os.Getenv(PortEnv)

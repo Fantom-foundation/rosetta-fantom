@@ -17,7 +17,7 @@ package services
 import (
 	"context"
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/ethereum"
+	"github.com/Fantom-foundation/rosetta-fantom/opera"
 
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -57,16 +57,16 @@ func (s *NetworkAPIService) NetworkOptions(
 ) (*types.NetworkOptionsResponse, *types.Error) {
 	return &types.NetworkOptionsResponse{
 		Version: &types.Version{
-			NodeVersion:       ethereum.NodeVersion,
+			NodeVersion:       opera.NodeVersion,
 			RosettaVersion:    types.RosettaAPIVersion,
 			MiddlewareVersion: types.String(configuration.MiddlewareVersion),
 		},
 		Allow: &types.Allow{
 			Errors:                  Errors,
-			OperationTypes:          ethereum.OperationTypes,
-			OperationStatuses:       ethereum.OperationStatuses,
-			HistoricalBalanceLookup: ethereum.HistoricalBalanceSupported,
-			CallMethods:             ethereum.CallMethods,
+			OperationTypes:          opera.OperationTypes,
+			OperationStatuses:       opera.OperationStatuses,
+			HistoricalBalanceLookup: opera.HistoricalBalanceSupported,
+			CallMethods:             opera.CallMethods,
 		},
 	}, nil
 }
@@ -82,11 +82,11 @@ func (s *NetworkAPIService) NetworkStatus(
 
 	currentBlock, currentTime, syncStatus, peers, err := s.client.Status(ctx)
 	if err != nil {
-		return nil, wrapErr(ErrGeth, err)
+		return nil, wrapErr(ErrOpera, err)
 	}
 
 	if currentTime < asserter.MinUnixEpoch {
-		return nil, ErrGethNotReady
+		return nil, ErrOperaNotReady
 	}
 
 	return &types.NetworkStatusResponse{

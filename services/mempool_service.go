@@ -50,7 +50,7 @@ func (s *MempoolAPIService) Mempool(
 
 	response, err := s.client.GetMempool(ctx)
 	if err != nil {
-		return nil, wrapErr(ErrGeth, err)
+		return nil, wrapErr(ErrOpera, err)
 	}
 
 	return response, nil
