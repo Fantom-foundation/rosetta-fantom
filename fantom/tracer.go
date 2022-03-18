@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package opera
+package fantom
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ import (
 // convert raw eth data from client to rosetta
 
 const (
-	tracerPath = "opera/call_tracer.js"
+	tracerPath = "fantom/call_tracer.js"
 )
 
 var (

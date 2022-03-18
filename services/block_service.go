@@ -19,7 +19,7 @@ import (
 	"errors"
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -51,7 +51,7 @@ func (s *BlockAPIService) Block(
 	}
 
 	block, err := s.client.Block(ctx, request.BlockIdentifier)
-	if errors.Is(err, opera.ErrBlockOrphaned) {
+	if errors.Is(err, fantom.ErrBlockOrphaned) {
 		return nil, wrapErr(ErrBlockOrphaned, err)
 	}
 	if err != nil {

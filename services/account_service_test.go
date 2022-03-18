@@ -20,7 +20,7 @@ import (
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
 	mocks "github.com/Fantom-foundation/rosetta-fantom/mocks/services"
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/assert"
@@ -69,7 +69,7 @@ func TestAccountBalance_Online(t *testing.T) {
 		Balances: []*types.Amount{
 			{
 				Value:    "25",
-				Currency: opera.Currency,
+				Currency: fantom.Currency,
 			},
 		},
 	}

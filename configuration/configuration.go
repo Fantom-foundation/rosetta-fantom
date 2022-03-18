@@ -21,7 +21,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -111,20 +111,20 @@ func LoadConfiguration() (*Configuration, error) {
 	switch networkValue {
 	case Mainnet:
 		config.Network = &types.NetworkIdentifier{
-			Blockchain: opera.Blockchain,
-			Network:    opera.MainnetNetwork,
+			Blockchain: fantom.Blockchain,
+			Network:    fantom.MainnetNetwork,
 		}
-		config.GenesisBlockIdentifier = opera.FantomMainnetGenesisBlockIdentifier
+		config.GenesisBlockIdentifier = fantom.FantomMainnetGenesisBlockIdentifier
 		config.ChainID = big.NewInt(0xFA)
-		config.OperaArguments = opera.MainnetOperaArguments
+		config.OperaArguments = fantom.MainnetOperaArguments
 	case Testnet:
 		config.Network = &types.NetworkIdentifier{
-			Blockchain: opera.Blockchain,
-			Network:    opera.TestnetNetwork,
+			Blockchain: fantom.Blockchain,
+			Network:    fantom.TestnetNetwork,
 		}
-		config.GenesisBlockIdentifier = opera.FantomTestnetGenesisBlockIdentifier
+		config.GenesisBlockIdentifier = fantom.FantomTestnetGenesisBlockIdentifier
 		config.ChainID = big.NewInt(0xFA2)
-		config.OperaArguments = opera.TestnetOperaArguments
+		config.OperaArguments = fantom.TestnetOperaArguments
 	case "":
 		return nil, errors.New("NETWORK must be populated")
 	default:

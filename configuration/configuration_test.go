@@ -21,7 +21,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/assert"
@@ -58,13 +58,13 @@ func TestLoadConfiguration(t *testing.T) {
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
-					Network:    opera.MainnetNetwork,
-					Blockchain: opera.Blockchain,
+					Network:    fantom.MainnetNetwork,
+					Blockchain: fantom.Blockchain,
 				},
-				GenesisBlockIdentifier: opera.FantomMainnetGenesisBlockIdentifier,
+				GenesisBlockIdentifier: fantom.FantomMainnetGenesisBlockIdentifier,
 				Port:                   1000,
 				OperaURL:               DefaultOperaURL,
-				OperaArguments:         opera.MainnetOperaArguments,
+				OperaArguments:         fantom.MainnetOperaArguments,
 				SkipAdmin:              false,
 				ChainID:                big.NewInt(0xFA),
 			},
@@ -78,14 +78,14 @@ func TestLoadConfiguration(t *testing.T) {
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
-					Network:    opera.MainnetNetwork,
-					Blockchain: opera.Blockchain,
+					Network:    fantom.MainnetNetwork,
+					Blockchain: fantom.Blockchain,
 				},
-				GenesisBlockIdentifier: opera.FantomMainnetGenesisBlockIdentifier,
+				GenesisBlockIdentifier: fantom.FantomMainnetGenesisBlockIdentifier,
 				Port:                   1000,
 				OperaURL:               "http://blah",
 				RemoteOpera:            true,
-				OperaArguments:         opera.MainnetOperaArguments,
+				OperaArguments:         fantom.MainnetOperaArguments,
 				SkipAdmin:              true,
 				ChainID:                big.NewInt(0xFA),
 			},
@@ -98,13 +98,13 @@ func TestLoadConfiguration(t *testing.T) {
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
-					Network:    opera.TestnetNetwork,
-					Blockchain: opera.Blockchain,
+					Network:    fantom.TestnetNetwork,
+					Blockchain: fantom.Blockchain,
 				},
-				GenesisBlockIdentifier: opera.FantomTestnetGenesisBlockIdentifier,
+				GenesisBlockIdentifier: fantom.FantomTestnetGenesisBlockIdentifier,
 				Port:                   1000,
 				OperaURL:               DefaultOperaURL,
-				OperaArguments:         opera.TestnetOperaArguments,
+				OperaArguments:         fantom.TestnetOperaArguments,
 				SkipAdmin:              true,
 				ChainID:                big.NewInt(0xFA2),
 			},

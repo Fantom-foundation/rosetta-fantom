@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package opera
+package fantom
 
 import (
 	"context"
@@ -95,10 +95,10 @@ const (
 	TransferGasLimit = int64(21000) //nolint:gomnd
 
 	// MainnetOperaArguments are the arguments to start a mainnet Opera instance.
-	MainnetOperaArguments = `--config=/app/ethereum/opera.toml --genesis=/data/genesis.g`
+	MainnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/genesis.g`
 
 	// TestnetOperaArguments are the arguments to start a testnet Opera instance.
-	TestnetOperaArguments = `--config=/app/ethereum/opera.toml --genesis=/data/testnet.g`
+	TestnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/testnet.g`
 
 	// IncludeMempoolCoins does not apply to rosetta-fantom as it is not UTXO-based.
 	IncludeMempoolCoins = false

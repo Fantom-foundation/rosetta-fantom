@@ -22,7 +22,7 @@ import (
 	"testing"
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 	mocks "github.com/Fantom-foundation/rosetta-fantom/mocks/services"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -51,8 +51,8 @@ func forceMarshalMap(t *testing.T, i interface{}) map[string]interface{} {
 
 func TestConstructionService(t *testing.T) {
 	networkIdentifier = &types.NetworkIdentifier{
-		Network:    opera.TestnetNetwork,
-		Blockchain: opera.Blockchain,
+		Network:    fantom.TestnetNetwork,
+		Blockchain: fantom.Blockchain,
 	}
 
 	cfg := &configuration.Configuration{
@@ -134,7 +134,7 @@ func TestConstructionService(t *testing.T) {
 		SuggestedFee: []*types.Amount{
 			{
 				Value:    "21000000000000",
-				Currency: opera.Currency,
+				Currency: fantom.Currency,
 			},
 		},
 	}, metadataResponse)

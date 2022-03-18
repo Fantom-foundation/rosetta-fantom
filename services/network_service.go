@@ -17,7 +17,7 @@ package services
 import (
 	"context"
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -57,16 +57,16 @@ func (s *NetworkAPIService) NetworkOptions(
 ) (*types.NetworkOptionsResponse, *types.Error) {
 	return &types.NetworkOptionsResponse{
 		Version: &types.Version{
-			NodeVersion:       opera.NodeVersion,
+			NodeVersion:       fantom.NodeVersion,
 			RosettaVersion:    types.RosettaAPIVersion,
 			MiddlewareVersion: types.String(configuration.MiddlewareVersion),
 		},
 		Allow: &types.Allow{
 			Errors:                  Errors,
-			OperationTypes:          opera.OperationTypes,
-			OperationStatuses:       opera.OperationStatuses,
-			HistoricalBalanceLookup: opera.HistoricalBalanceSupported,
-			CallMethods:             opera.CallMethods,
+			OperationTypes:          fantom.OperationTypes,
+			OperationStatuses:       fantom.OperationStatuses,
+			HistoricalBalanceLookup: fantom.HistoricalBalanceSupported,
+			CallMethods:             fantom.CallMethods,
 		},
 	}, nil
 }

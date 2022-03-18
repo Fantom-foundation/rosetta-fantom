@@ -21,7 +21,7 @@ import (
 
 	"github.com/Fantom-foundation/rosetta-fantom/configuration"
 	mocks "github.com/Fantom-foundation/rosetta-fantom/mocks/services"
-	"github.com/Fantom-foundation/rosetta-fantom/opera"
+	"github.com/Fantom-foundation/rosetta-fantom/fantom"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/assert"
@@ -93,7 +93,7 @@ func TestBlockService_Online(t *testing.T) {
 
 	t.Run("orphaned block", func(t *testing.T) {
 		pbIdentifier := types.ConstructPartialBlockIdentifier(block.BlockIdentifier)
-		mockClient.On("Block", ctx, pbIdentifier).Return(nil, opera.ErrBlockOrphaned).Once()
+		mockClient.On("Block", ctx, pbIdentifier).Return(nil, fantom.ErrBlockOrphaned).Once()
 		b, err := servicer.Block(ctx, &types.BlockRequest{
 			BlockIdentifier: pbIdentifier,
 		})

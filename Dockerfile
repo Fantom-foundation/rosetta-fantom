@@ -56,9 +56,9 @@ RUN cd src \
   && go build
 
 RUN mv src/rosetta-fantom /app/rosetta-fantom \
-  && mkdir /app/client \
-  && mv src/opera/call_tracer.js /app/opera/call_tracer.js \
-  && mv src/opera/opera.toml /app/opera/opera.toml \
+  && mkdir /app/fantom \
+  && mv src/fantom/call_tracer.js /app/fantom/call_tracer.js \
+  && mv src/fantom/opera.toml /app/fantom/opera.toml \
   && rm -rf src
 
 ## Build Final Image
@@ -76,8 +76,8 @@ WORKDIR /app
 # Copy binary from opera-builder
 COPY --from=opera-builder /app/opera /app/opera
 
-# Copy binary from rosetta-builder
-COPY --from=rosetta-builder /app/client /app/client
+# Copy binary and assets from rosetta-builder
+COPY --from=rosetta-builder /app/fantom /app/fantom
 COPY --from=rosetta-builder /app/rosetta-fantom /app/rosetta-fantom
 
 # Set permissions for everything added to /app
