@@ -1,0 +1,132 @@
+[
+ {
+  "account_identifier": {
+   "address": "0xd6A37423Be930019b8CFeA57BE049329f3119a3D"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "2000000100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x541E408443A592C38e01Bed0cB31f9De8c1322d0"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x35701189D211215Cb38393f407B4767886DeB03A"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0xEfC9200cD50ae935DA5d79D122660DDB53620E74"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0xe9f77B989E3a73ed24D0467fAA9300Ab94477915"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x7f9d1dbaf84d827b0840e38f555a490969978d20"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0xfd09f0296af88ac777c137ecd92d85583a9b9e4a"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x520D07E2F0F3f60b7510e65a291862976a9547c6"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x93194b30FA85D1927852769bAB1822dD2B6818e1"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0xc73b84eac512a04f139D4a200aAe0FF24c4A5cBC"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0xd160D9B59508e4636eEc3E0a7f734268D1cE1047"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x03894D86CC6e1E41e8bBa17469204D304C4e92b8"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ },
+ {
+  "account_identifier": {
+   "address": "0x51AF0532E6BD89695266E714a1B09fD1Ac297DC7"
+  },
+  "currency": {
+   "symbol": "FTM",
+   "decimals": 18
+  },
+  "value": "100000000000000000000"
+ }
+]

@@ -1,0 +1,26 @@
+# Systemd service file for Rosetta Fantom
+# Copy it into /etc/systemd/system/ to use rosetta-fantom as a systemd service.
+
+[Unit]
+Description=Rosetta Fantom
+After=opera.service
+
+[Service]
+Type=simple
+User=opera
+Group=opera
+WorkingDirectory=/home/opera/go/src/rosetta-fantom
+ExecStart=/home/opera/go/src/rosetta-fantom/rosetta-fantom run
+Environment=MODE=ONLINE
+Environment=NETWORK=TESTNET
+Environment=PORT=8080
+Environment=OPERA=http://localhost/
+Environment=SKIP_ADMIN=TRUE
+Restart=on-failure
+RestartSec=10s
+TimeoutSec=120
+
+[Install]
+WantedBy=multi-user.target
+Alias=lachesis.service
+

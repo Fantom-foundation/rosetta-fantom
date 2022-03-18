@@ -1,0 +1,11 @@
+[
+  {
+    "account_identifier": {
+      "address":"0xFC00FACE00000000000000000000000000000000"
+    },
+    "currency": {
+      "symbol": "FTM",
+      "decimals": 18
+    }
+  }
+]
