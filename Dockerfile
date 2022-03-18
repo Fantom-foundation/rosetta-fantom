@@ -36,10 +36,10 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 # Compile Opera
 FROM golang-builder as opera-builder
 
-# VERSION: go-opera v1.1.0-rc.4
-RUN git clone https://github.com/Fantom-foundation/go-opera \
+# VERSION: go-opera v1.1.0-rc.4 + debug api PR
+RUN git clone https://github.com/hkalina/go-opera \
   && cd go-opera \
-  && git checkout 8d3ee1a192057046a1eb3befbe985aa9c4d7147d
+  && git -c advice.detachedHead=false checkout b5665e54a019bcf8ad11692d0a71dcd082e2472c
 
 RUN cd go-opera \
   && make
