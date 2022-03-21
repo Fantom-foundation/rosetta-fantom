@@ -22,7 +22,7 @@
     }
   },
   "data": {
-    "start_index": 4564030,
+    "start_index": 4564031,
     "initial_balance_fetch_disabled": false,
     "bootstrap_balances": "balances-4564030.json",
     "exempt_accounts": "exempt_accounts.json",
