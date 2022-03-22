@@ -49,11 +49,12 @@ Running the following commands will create a Docker image called `rosetta-fantom
 #### From GitHub
 To download the pre-built Docker image from the latest release, run:
 ```text
-curl -sSfL https://raw.githubusercontent.com/coinbase/rosetta-fantom/master/install.sh | sh -s
+curl -sSfL https://raw.githubusercontent.com/Fantom-foundation/rosetta-fantom/main/install.sh | sh -s
 ```
 
 _Do not try to install rosetta-fantom using GitHub Packages!_
 
+_This will work only if this repository is public, if it is private, you need to use following steps._
 
 #### From Source
 After cloning this repository, run:
@@ -76,13 +77,13 @@ at port `8080`.
 
 #### Mainnet:Online
 ```text
-docker run -d --rm --ulimit "nofile=100000:100000" -v "$(pwd)/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
+docker run -d --rm --ulimit "nofile=100000:100000" -v "$(pwd)/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
 _If you cloned the repository, you can run `make run-mainnet-online`._
 
 #### Mainnet:Online (Remote)
 ```text
-docker run -d --rm --ulimit "nofile=100000:100000" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -e "OPERA=<NODE URL>" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
+docker run -d --rm --ulimit "nofile=100000:100000" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -e "OPERA=<NODE URL>" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
 _If you cloned the repository, you can run `make run-mainnet-remote opera=<NODE URL>`._
 
@@ -94,13 +95,13 @@ _If you cloned the repository, you can run `make run-mainnet-offline`._
 
 #### Testnet:Online
 ```text
-docker run -d --rm --ulimit "nofile=100000:100000" -v "$(pwd)/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
+docker run -d --rm --ulimit "nofile=100000:100000" -v "$(pwd)/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
 _If you cloned the repository, you can run `make run-testnet-online`._
 
 #### Testnet:Online (Remote)
 ```text
-docker run -d --rm --ulimit "nofile=100000:100000" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -e "OPERA=<NODE URL>" -p 8080:8080 -p 30303:30303 rosetta-fantom:latest
+docker run -d --rm --ulimit "nofile=100000:100000" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -e "OPERA=<NODE URL>" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
 _If you cloned the repository, you can run `make run-testnet-remote opera=<NODE URL>`._
 

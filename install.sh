@@ -198,7 +198,7 @@ EOF
 
 BINARY=rosetta-fantom
 FORMAT=tar.gz
-OWNER=coinbase
+OWNER=Fantom-foundation
 REPO="rosetta-fantom"
 PREFIX="$OWNER/$REPO"
 
