@@ -10,11 +10,19 @@
   "max_online_connections": 500,
   "max_sync_concurrency": 64,
   "tip_delay": 120,
-  "compression_disabled":true,
-  "memory_limit_disabled":true,
+  "compression_disabled": true,
+  "memory_limit_disabled": true,
   "data": {
-    "bootstrap_balances": "bootstrap_balances.json",
+    "start_index": 4564200,
+    "initial_balance_fetch_disabled": false,
+    "historical_balance_disabled": false,
+    "active_reconciliation_concurrency": 32,
     "exempt_accounts": "exempt_accounts.json",
-    "log_balance_changes":false
+    "end_conditions": {
+      "reconciliation_coverage": {
+        "coverage": 0.95,
+        "from_tip": true
+      }
+    }
   }
 }

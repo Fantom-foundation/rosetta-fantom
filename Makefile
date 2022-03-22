@@ -53,6 +53,9 @@ run-mainnet-offline:
 run-testnet-online:
 	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
+run-testnet-online-var:
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+
 run-testnet-offline:
 	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=TESTNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest
 
