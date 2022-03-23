@@ -36,10 +36,10 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 # Compile Opera
 FROM golang-builder as opera-builder
 
-# VERSION: go-opera release/txtracing/1.1.1-rc.1
+# VERSION: go-opera release/txtracing/1.1.0-rc.4
 RUN git clone https://github.com/Fantom-foundation/go-opera \
   && cd go-opera \
-  && git -c advice.detachedHead=false checkout 9c3d2487fd4b351fb85afd6a1c99031693bae532
+  && git -c advice.detachedHead=false checkout e1cea271af2a83547dbcd245ca2ea83a8ff34c42
 
 RUN cd go-opera \
   && make

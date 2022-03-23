@@ -114,9 +114,9 @@ _If you cloned the repository, you can run `make run-testnet-offline`._
 ## Testing with rosetta-cli
 To validate `rosetta-fantom`, [install `rosetta-cli`](https://github.com/coinbase/rosetta-cli#install)
 and run one of the following commands:
-* `rosetta-cli check:data --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates that the Data API implementation is correct using the Opera `testnet` node. It also ensures that the implementation does not miss any balance-changing operations.
-* `rosetta-cli check:construction --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates the Construction API implementation. It also verifies transaction construction, signing, and submissions to the `testnet` network.
-* `rosetta-cli check:data --configuration-file rosetta-cli-conf/mainnet/config.json` - This command validates that the Data API implementation is correct using the Opera `mainnet` node. It also ensures that the implementation does not miss any balance-changing operations.
+* `rosetta-cli check:data --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates that the Data API implementation is correct using the Opera Testnet node. It also ensures that the implementation does not miss any balance-changing operations.
+* `rosetta-cli check:construction --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates the Construction API implementation. It also verifies transaction construction, signing, and submissions to the Testnet network.
+* `rosetta-cli check:data --configuration-file rosetta-cli-conf/mainnet/config.json` - This command validates that the Data API implementation is correct using the Opera Mainnet node. It also ensures that the implementation does not miss any balance-changing operations.
 
 ## Issues
 Interested in helping fix issues in this repository? You can find to-dos in the [Issues](https://github.com/Fantom-foundation/rosetta-fantom/issues) section.

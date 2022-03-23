@@ -13,7 +13,7 @@
   "compression_disabled": true,
   "memory_limit_disabled": true,
   "data": {
-    "start_index": 4564200,
+    "start_index": 4564026,
     "initial_balance_fetch_disabled": false,
     "historical_balance_disabled": false,
     "active_reconciliation_concurrency": 32,
