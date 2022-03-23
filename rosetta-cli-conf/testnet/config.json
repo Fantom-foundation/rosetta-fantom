@@ -13,6 +13,7 @@
   "compression_disabled": true,
   "memory_limit_disabled": true,
   "construction": {
+    "offline_url": "http://localhost:8081",
     "stale_depth": 3,
     "broadcast_limit": 5,
     "constructor_dsl_file": "fantom.ros",
@@ -22,9 +23,11 @@
     }
   },
   "data": {
-    "start_index": 4564031,
+    "start_index": 4564026,
     "initial_balance_fetch_disabled": false,
     "historical_balance_disabled": false,
+    "balance_tracking_disabled": false,
+    "reconciliation_disabled": false,
     "exempt_accounts": "exempt_accounts.json",
     "end_conditions": {
       "reconciliation_coverage": {

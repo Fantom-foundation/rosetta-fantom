@@ -8,6 +8,9 @@ GraphQLVirtualHosts = ["*"]
 HTTPModules = ["eth", "debug", "admin", "txpool"]
 IPCPath = ""
 
+[Node.P2P]
+MaxPeers = 200
+
 [Node.HTTPTimeouts]
 ReadTimeout = 120000000000
 WriteTimeout = 120000000000

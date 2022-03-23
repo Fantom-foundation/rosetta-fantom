@@ -16,6 +16,8 @@
     "start_index": 4564026,
     "initial_balance_fetch_disabled": false,
     "historical_balance_disabled": false,
+    "balance_tracking_disabled": false,
+    "reconciliation_disabled": false,
     "active_reconciliation_concurrency": 32,
     "exempt_accounts": "exempt_accounts.json",
     "end_conditions": {
