@@ -297,7 +297,7 @@ func (ec *Client) Transaction(
 
 	tx, err := ec.populateTransaction(loadedTx)
 	if err != nil {
-		return nil, fmt.Errorf("%w: cannot parse %s", err, loadedTx.Transaction.Hash().Hex())
+		return nil, fmt.Errorf("%w: cannot parse %s", err, loadedTx.Hash.Hex())
 	}
 	return tx, nil
 }
@@ -622,7 +622,7 @@ func (ec *Client) getBlockReceipts(
 	for i := range reqs {
 		reqs[i] = rpc.BatchElem{
 			Method: "eth_getTransactionReceipt",
-			Args:   []interface{}{txs[i].tx.Hash().Hex()},
+			Args:   []interface{}{txs[i].Hash.Hex()},
 			Result: &receipts[i],
 		}
 	}
@@ -634,7 +634,7 @@ func (ec *Client) getBlockReceipts(
 			return nil, reqs[i].Error
 		}
 		if receipts[i] == nil {
-			return nil, fmt.Errorf("got empty receipt for %x", txs[i].tx.Hash().Hex())
+			return nil, fmt.Errorf("got empty receipt for %x", txs[i].Hash.Hex())
 		}
 
 		if receipts[i].BlockHash != blockHash {
@@ -914,6 +914,7 @@ type txExtraInfo struct {
 	BlockNumber *string         `json:"blockNumber,omitempty"`
 	BlockHash   *common.Hash    `json:"blockHash,omitempty"`
 	From        *common.Address `json:"from,omitempty"`
+	Hash        *common.Hash    `json:"hash,omitempty"`
 }
 
 type rpcTransaction struct {
@@ -934,6 +935,7 @@ func (tx *rpcTransaction) LoadedTransaction() *loadedTransaction {
 		From:        tx.txExtraInfo.From,
 		BlockNumber: tx.txExtraInfo.BlockNumber,
 		BlockHash:   tx.txExtraInfo.BlockHash,
+		Hash:        tx.Hash,
 	}
 	return ethTx
 }
@@ -947,6 +949,7 @@ type loadedTransaction struct {
 	FeeBurned   *big.Int // nil if no fees were burned
 	Miner       string
 	Status      bool
+	Hash        *common.Hash
 
 	Trace    *Call
 	RawTrace json.RawMessage
@@ -1204,7 +1207,7 @@ func (ec *Client) populateTransactions(
 			tx,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("cannot populate tx %s: %w", tx.Transaction.Hash().Hex(), err)
+			return nil, fmt.Errorf("cannot populate tx %s: %w", tx.Hash.Hex(), err)
 		}
 
 		transactions[i] = transaction
@@ -1251,7 +1254,7 @@ func (ec *Client) populateTransaction(
 
 	populatedTransaction := &RosettaTypes.Transaction{
 		TransactionIdentifier: &RosettaTypes.TransactionIdentifier{
-			Hash: tx.Transaction.Hash().Hex(),
+			Hash: tx.Hash.Hex(),
 		},
 		Operations: ops,
 		Metadata: map[string]interface{}{
