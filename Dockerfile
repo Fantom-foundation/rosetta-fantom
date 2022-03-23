@@ -59,12 +59,13 @@ RUN mv src/rosetta-fantom /app/rosetta-fantom \
   && mkdir /app/fantom \
   && mv src/fantom/call_tracer.js /app/fantom/call_tracer.js \
   && mv src/fantom/opera.toml /app/fantom/opera.toml \
+  && mv src/run.sh /app/run.sh \
   && rm -rf src
 
 ## Build Final Image
 FROM ubuntu:20.04
 
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates wget && update-ca-certificates
 
 RUN mkdir -p /app \
   && chown -R nobody:nogroup /app \
@@ -79,8 +80,9 @@ COPY --from=opera-builder /app/opera /app/opera
 # Copy binary and assets from rosetta-builder
 COPY --from=rosetta-builder /app/fantom /app/fantom
 COPY --from=rosetta-builder /app/rosetta-fantom /app/rosetta-fantom
+COPY --from=rosetta-builder /app/run.sh /app/run.sh
 
 # Set permissions for everything added to /app
 RUN chmod -R 755 /app/*
 
-CMD ["/app/rosetta-fantom", "run"]
+CMD ["/bin/bash", "/app/run.sh"]

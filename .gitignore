@@ -1,5 +1,6 @@
 rosetta-fantom
-opera-data
+opera-data-mainnet
+opera-data-testnet
 cli-data
 build
 .idea

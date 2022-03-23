@@ -21,6 +21,11 @@ LINT_SETTINGS=golint,misspell,gocyclo,gocritic,whitespace,goconst,gocognit,bodyc
 PWD=$(shell pwd)
 NOFILE=100000
 
+MAINNET_GENESIS=mainnet.g
+MAINNET_GENESIS_HASH=704105c268a01093f18e896767086efa68b8045e
+TESTNET_GENESIS=testnet.g
+TESTNET_GENESIS_HASH=ba37d578249da67cb5744069cc54f49a6938030d
+
 deps:
 	go get ./...
 
@@ -42,19 +47,19 @@ update-tracer:
 	curl https://raw.githubusercontent.com/ethereum/go-ethereum/master/eth/tracers/js/internal/tracers/call_tracer_js.js -o fantom/call_tracer.js
 
 run-mainnet-online:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data-mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "GENESIS=${MAINNET_GENESIS}" -e "GENESISHASH=${MAINNET_GENESIS_HASH}" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-mainnet-online-var:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "GENESIS=${MAINNET_GENESIS}" -e "GENESISHASH=${MAINNET_GENESIS_HASH}" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-mainnet-offline:
 	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=MAINNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest
 
 run-testnet-online:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data-testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "GENESIS=${TESTNET_GENESIS}" -e "GENESISHASH=${TESTNET_GENESIS_HASH}" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-testnet-online-var:
-	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "GENESIS=${TESTNET_GENESIS}" -e "GENESISHASH=${TESTNET_GENESIS_HASH}" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-testnet-offline:
 	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=TESTNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest

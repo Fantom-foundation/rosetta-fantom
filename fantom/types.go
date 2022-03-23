@@ -95,7 +95,7 @@ const (
 	TransferGasLimit = int64(21000) //nolint:gomnd
 
 	// MainnetOperaArguments are the arguments to start a mainnet Opera instance.
-	MainnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/genesis.g`
+	MainnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/mainnet.g`
 
 	// TestnetOperaArguments are the arguments to start a testnet Opera instance.
 	TestnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/testnet.g`
