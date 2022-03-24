@@ -69,7 +69,7 @@ func TestConstructionService(t *testing.T) {
 	publicKey := &types.PublicKey{
 		Bytes: forceHexDecode(
 			t,
-			"03d3d3358e7f69cbe45bde38d7d6f24660c7eeeaee5c5590cfab985c8839b21fd5",
+			"033f1e373efd92eb487fccdb1944e2b8aa5f6519a966cb924517f07dbd1a1e6932",
 		),
 		CurveType: types.Secp256k1,
 	}
@@ -80,12 +80,12 @@ func TestConstructionService(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, &types.ConstructionDeriveResponse{
 		AccountIdentifier: &types.AccountIdentifier{
-			Address: "0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309",
+			Address: "0x881d953652933937186BDf0680eD3c3c8a0162Ab",
 		},
 	}, deriveResponse)
 
 	// Test Preprocess
-	intent := `[{"operation_identifier":{"index":0},"type":"CALL","account":{"address":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"},"amount":{"value":"-42894881044106498","currency":{"symbol":"ETH","decimals":18}}},{"operation_identifier":{"index":1},"type":"CALL","account":{"address":"0x57B414a0332B5CaB885a451c2a28a07d1e9b8a8d"},"amount":{"value":"42894881044106498","currency":{"symbol":"ETH","decimals":18}}}]` // nolint
+	intent := `[{"operation_identifier":{"index":0},"type":"CALL","account":{"address":"0x881d953652933937186BDf0680eD3c3c8a0162Ab"},"amount":{"value":"-42894881044106498","currency":{"symbol":"FTM","decimals":18}}},{"operation_identifier":{"index":1},"type":"CALL","account":{"address":"0x57B414a0332B5CaB885a451c2a28a07d1e9b8a8d"},"amount":{"value":"42894881044106498","currency":{"symbol":"FTM","decimals":18}}}]` // nolint
 	var ops []*types.Operation
 	assert.NoError(t, json.Unmarshal([]byte(intent), &ops))
 	preprocessResponse, err := servicer.ConstructionPreprocess(
@@ -96,7 +96,7 @@ func TestConstructionService(t *testing.T) {
 		},
 	)
 	assert.Nil(t, err)
-	optionsRaw := `{"from":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"}`
+	optionsRaw := `{"from":"0x881d953652933937186BDf0680eD3c3c8a0162Ab"}`
 	var options options
 	assert.NoError(t, json.Unmarshal([]byte(optionsRaw), &options))
 	assert.Equal(t, &types.ConstructionPreprocessResponse{
@@ -119,7 +119,7 @@ func TestConstructionService(t *testing.T) {
 	mockClient.On(
 		"PendingNonceAt",
 		ctx,
-		common.HexToAddress("0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"),
+		common.HexToAddress("0x881d953652933937186BDf0680eD3c3c8a0162Ab"),
 	).Return(
 		uint64(0),
 		nil,
@@ -140,14 +140,14 @@ func TestConstructionService(t *testing.T) {
 	}, metadataResponse)
 
 	// Test Payloads
-	unsignedRaw := `{"from":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309","to":"0x57B414a0332B5CaB885a451c2a28a07d1e9b8a8d","value":"0x9864aac3510d02","data":"0x","nonce":"0x0","gas_price":"0x3b9aca00","gas":"0x5208","chain_id":"0x3"}` // nolint
+	unsignedRaw := `{"from":"0x881d953652933937186BDf0680eD3c3c8a0162Ab","to":"0x57B414a0332B5CaB885a451c2a28a07d1e9b8a8d","value":"0x9864aac3510d02","data":"0x","nonce":"0x0","gas_price":"0x3b9aca00","gas":"0x5208","chain_id":"0xfa2"}` // nolint
 	payloadsResponse, err := servicer.ConstructionPayloads(ctx, &types.ConstructionPayloadsRequest{
 		NetworkIdentifier: networkIdentifier,
 		Operations:        ops,
 		Metadata:          forceMarshalMap(t, metadata),
 	})
 	assert.Nil(t, err)
-	payloadsRaw := `[{"address":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309","hex_bytes":"b682f3e39c512ff57471f482eab264551487320cbd3b34485f4779a89e5612d1","account_identifier":{"address":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"},"signature_type":"ecdsa_recovery"}]` // nolint
+	payloadsRaw := `[{"address":"0x881d953652933937186BDf0680eD3c3c8a0162Ab","hex_bytes":"061454671a5cdcca4ce14bf4a0ae547f96b2eb822756251d07fa073c699c4524","account_identifier":{"address":"0x881d953652933937186BDf0680eD3c3c8a0162Ab"},"signature_type":"ecdsa_recovery"}]` // nolint
 	var payloads []*types.SigningPayload
 	assert.NoError(t, json.Unmarshal([]byte(payloadsRaw), &payloads))
 	assert.Equal(t, &types.ConstructionPayloadsResponse{
@@ -156,8 +156,8 @@ func TestConstructionService(t *testing.T) {
 	}, payloadsResponse)
 
 	// Test Parse Unsigned
-	parseOpsRaw := `[{"operation_identifier":{"index":0},"type":"CALL","account":{"address":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"},"amount":{"value":"-42894881044106498","currency":{"symbol":"ETH","decimals":18}}},{"operation_identifier":{"index":1},"related_operations":[{"index":0}],"type":"CALL","account":{"address":"0x57B414a0332B5CaB885a451c2a28a07d1e9b8a8d"},"amount":{"value":"42894881044106498","currency":{"symbol":"ETH","decimals":18}}}]` // nolint
-	var parseOps []*types.Operation
+	parseOpsRaw := `[{"operation_identifier":{"index":0},"type":"CALL","account":{"address":"0x881d953652933937186BDf0680eD3c3c8a0162Ab"},"amount":{"value":"-42894881044106498","currency":{"symbol":"FTM","decimals":18}}},{"operation_identifier":{"index":1},"related_operations":[{"index":0}],"type":"CALL","account":{"address":"0x57B414a0332B5CaB885a451c2a28a07d1e9b8a8d"},"amount":{"value":"42894881044106498","currency":{"symbol":"FTM","decimals":18}}}]` // nolint
+	var parseOps []*types.Operation // expected parse output
 	assert.NoError(t, json.Unmarshal([]byte(parseOpsRaw), &parseOps))
 	parseUnsignedResponse, err := servicer.ConstructionParse(ctx, &types.ConstructionParseRequest{
 		NetworkIdentifier: networkIdentifier,
@@ -168,7 +168,7 @@ func TestConstructionService(t *testing.T) {
 	parseMetadata := &parseMetadata{
 		Nonce:    metadata.Nonce,
 		GasPrice: metadata.GasPrice,
-		ChainID:  big.NewInt(3),
+		ChainID:  big.NewInt(0xFA2),
 	}
 	assert.Equal(t, &types.ConstructionParseResponse{
 		Operations:               parseOps,
@@ -177,10 +177,11 @@ func TestConstructionService(t *testing.T) {
 	}, parseUnsignedResponse)
 
 	// Test Combine
-	signaturesRaw := `[{"hex_bytes":"8c712c64bc65c4a88707fa93ecd090144dffb1bf133805a10a51d354c2f9f2b25a63cea6989f4c58372c41f31164036a6b25dce1d5c05e1d31c16c0590c176e801","signing_payload":{"address":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309","hex_bytes":"b682f3e39c512ff57471f482eab264551487320cbd3b34485f4779a89e5612d1","account_identifier":{"address":"0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"},"signature_type":"ecdsa_recovery"},"public_key":{"hex_bytes":"03d3d3358e7f69cbe45bde38d7d6f24660c7eeeaee5c5590cfab985c8839b21fd5","curve_type":"secp256k1"},"signature_type":"ecdsa_recovery"}]` // nolint
+	// signature = r + s + "01" (reference signature generated from web3.eth.account.sign_transaction output)
+	signaturesRaw := `[{"hex_bytes":"811EB6DB6485BADE9BF08BE96671BC0227ADD7451BC1F108DE790A58F676B45D45CED2D4C100CFD7AE0B33C1F59F43B05563912C8203E70AC8D428C86C21F77C01","signing_payload":{"address":"0x881d953652933937186BDf0680eD3c3c8a0162Ab","hex_bytes":"061454671a5cdcca4ce14bf4a0ae547f96b2eb822756251d07fa073c699c4524","account_identifier":{"address":"0x881d953652933937186BDf0680eD3c3c8a0162Ab"},"signature_type":"ecdsa_recovery"},"public_key":{"hex_bytes":"033f1e373efd92eb487fccdb1944e2b8aa5f6519a966cb924517f07dbd1a1e6932","curve_type":"secp256k1"},"signature_type":"ecdsa_recovery"}]` // nolint
 	var signatures []*types.Signature
 	assert.NoError(t, json.Unmarshal([]byte(signaturesRaw), &signatures))
-	signedRaw := `{"type":"0x0","nonce":"0x0","gasPrice":"0x3b9aca00","maxPriorityFeePerGas":null,"maxFeePerGas":null,"gas":"0x5208","value":"0x9864aac3510d02","input":"0x","v":"0x2a","r":"0x8c712c64bc65c4a88707fa93ecd090144dffb1bf133805a10a51d354c2f9f2b2","s":"0x5a63cea6989f4c58372c41f31164036a6b25dce1d5c05e1d31c16c0590c176e8","to":"0x57b414a0332b5cab885a451c2a28a07d1e9b8a8d","hash":"0x424969b1a98757bcd748c60bad2a7de9745cfb26bfefb4550e780a098feada42"}` // nolint
+	signedRaw := `{"type":"0x0","nonce":"0x0","gasPrice":"0x3b9aca00","maxPriorityFeePerGas":null,"maxFeePerGas":null,"gas":"0x5208","value":"0x9864aac3510d02","input":"0x","v":"0x1f68","r":"0x811eb6db6485bade9bf08be96671bc0227add7451bc1f108de790a58f676b45d","s":"0x45ced2d4c100cfd7ae0b33c1f59f43b05563912c8203e70ac8d428c86c21f77c","to":"0x57b414a0332b5cab885a451c2a28a07d1e9b8a8d","hash":"0x58d9c340559b4ae3937a26a4def1d88b61c602ebbb8c430623d6df7f71e88f0d"}` // nolint
 	combineResponse, err := servicer.ConstructionCombine(ctx, &types.ConstructionCombineRequest{
 		NetworkIdentifier:   networkIdentifier,
 		UnsignedTransaction: unsignedRaw,
@@ -201,14 +202,14 @@ func TestConstructionService(t *testing.T) {
 	assert.Equal(t, &types.ConstructionParseResponse{
 		Operations: parseOps,
 		AccountIdentifierSigners: []*types.AccountIdentifier{
-			{Address: "0xe3a5B4d7f79d64088C8d4ef153A7DDe2B2d47309"},
+			{Address: "0x881d953652933937186BDf0680eD3c3c8a0162Ab"},
 		},
 		Metadata: forceMarshalMap(t, parseMetadata),
 	}, parseSignedResponse)
 
 	// Test Hash
 	transactionIdentifier := &types.TransactionIdentifier{
-		Hash: "0x424969b1a98757bcd748c60bad2a7de9745cfb26bfefb4550e780a098feada42",
+		Hash: "0x58d9c340559b4ae3937a26a4def1d88b61c602ebbb8c430623d6df7f71e88f0d",
 	}
 	hashResponse, err := servicer.ConstructionHash(ctx, &types.ConstructionHashRequest{
 		NetworkIdentifier: networkIdentifier,
