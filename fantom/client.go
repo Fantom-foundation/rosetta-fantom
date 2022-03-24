@@ -1332,9 +1332,9 @@ func (ec *Client) Balance(
 
 	var err error
 	var header *blockHeader
-	if block.Hash != nil {
+	if block != nil && block.Hash != nil {
 		header, err = ec.blockHeaderByHash(ctx, *block.Hash)
-	} else if block.Index != nil {
+	} else if block != nil && block.Index != nil {
 		header, err = ec.blockHeaderByNumber(ctx, big.NewInt(*block.Index))
 	} else {
 		header, err = ec.blockHeaderByNumber(ctx, nil) // latest block
