@@ -1,14 +1,6 @@
 <h3 align="center">
    Rosetta Fantom
 </h3>
-<p align="center">
-  <a href="https://github.com/Fantom-foundation/rosetta-fantom/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/Fantom-foundation/rosetta-fantom.svg" /></a>
-</p>
-
-<p align="center"><b>
-ROSETTA-FANTOM IS CONSIDERED <a href="https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha">ALPHA SOFTWARE</a>.
-USE AT YOUR OWN RISK! COINBASE ASSUMES NO RESPONSIBILITY OR LIABILITY IF THERE IS A BUG IN THIS IMPLEMENTATION.
-</b></p>
 
 ## Overview
 `rosetta-fantom` provides an implementation of the Rosetta API for Fantom Opera in Golang.
