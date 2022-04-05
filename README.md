@@ -3,13 +3,13 @@
 </h3>
 
 ## Overview
-`rosetta-fantom` provides an implementation of the Rosetta API for Fantom Opera in Golang.
-If you haven't heard of the Rosetta API, you can find more information [here](https://rosetta-api.org).
+`rosetta-fantom` is an implementation of the [Rosetta API](https://rosetta-api.org)
+for [Fantom Opera](https://fantom.foundation/what-is-fantom-opera/) blockchain in Golang.
+provides an implementation of the Rosetta API for Fantom Opera in Golang.
 
-## Features
-* Comprehensive tracking of all FTM balance changes
-* Stateless, offline, curve-based transaction construction (with address checksum validation)
-* Idempotent access to all transaction traces and receipts
+The implementation wraps a [go-opera](https://github.com/Fantom-foundation/go-opera) with the Go app
+into a docker image. The Go app then connects to the go-opera using RPC API and provides
+the Rosetta API as an adapter.
 
 ### Recommended OS Settings
 To increase the load `rosetta-fantom` can handle, it is recommended to tune your OS
@@ -71,9 +71,10 @@ at port `8080`.
 ```text
 docker run -d --rm --ulimit "nofile=100000:100000" -v "$(pwd)/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
-_If you cloned the repository, you can run `make run-mainnet-online`._
+_If you cloned the repository, you can run `make run-mainnet-online`. (Alternatively `make run-mainnet-online-var` to store Opera data in `/var/opera/mainnet` directory.)_
 
 #### Mainnet:Online (Remote)
+Note: using remote blockchain node is not compliant with the Rosetta spec - the spec requires to use a node running inside the container.
 ```text
 docker run -d --rm --ulimit "nofile=100000:100000" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -e "OPERA=<NODE URL>" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
@@ -89,7 +90,7 @@ _If you cloned the repository, you can run `make run-mainnet-offline`._
 ```text
 docker run -d --rm --ulimit "nofile=100000:100000" -v "$(pwd)/opera-data:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 ```
-_If you cloned the repository, you can run `make run-testnet-online`._
+_If you cloned the repository, you can run `make run-testnet-online`. (Alternatively `make run-testnet-online-var` to store Opera data in `/var/opera/testnet` directory.)_
 
 #### Testnet:Online (Remote)
 ```text
@@ -110,8 +111,10 @@ and run one of the following commands:
 * `rosetta-cli check:construction --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates the Construction API implementation. It also verifies transaction construction, signing, and submissions to the Testnet network.
 * `rosetta-cli check:data --configuration-file rosetta-cli-conf/mainnet/config.json` - This command validates that the Data API implementation is correct using the Opera Mainnet node. It also ensures that the implementation does not miss any balance-changing operations.
 
+Note: restarting of an interrupted test requires removing `"start_index"` field from the `config.json` file. Otherwise the test will restart from defined block instead of continuing by the last processed block. 
+
 ## Issues
-Interested in helping fix issues in this repository? You can find to-dos in the [Issues](https://github.com/Fantom-foundation/rosetta-fantom/issues) section.
+Did you find an issue in this repository? Report it in the [Issues](https://github.com/Fantom-foundation/rosetta-fantom/issues) section.
 
 ## Development
 * `make deps` to install dependencies
