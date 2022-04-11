@@ -19,7 +19,7 @@ FROM golang:1.18 as opera-builder
 # VERSION: go-opera release/txtracing/1.1.0-rc.4
 RUN git clone https://github.com/Fantom-foundation/go-opera \
   && cd go-opera \
-  && git -c advice.detachedHead=false checkout 91623cf96f701447d77a3e088c6d49e3d8648a3e
+  && git -c advice.detachedHead=false checkout a8e13986de3c51aa4c0f38047b54a6e75e1bea4f
 
 RUN cd go-opera \
   && make
