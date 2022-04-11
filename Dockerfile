@@ -14,12 +14,12 @@
 # limitations under the License.
 
 # Compile Opera
-FROM golang:1.17 as opera-builder
+FROM golang:1.18 as opera-builder
 
 # VERSION: go-opera release/txtracing/1.1.0-rc.4
 RUN git clone https://github.com/Fantom-foundation/go-opera \
   && cd go-opera \
-  && git -c advice.detachedHead=false checkout e1cea271af2a83547dbcd245ca2ea83a8ff34c42
+  && git -c advice.detachedHead=false checkout 91623cf96f701447d77a3e088c6d49e3d8648a3e
 
 RUN cd go-opera \
   && make
@@ -29,7 +29,7 @@ RUN mkdir -p /app \
   && rm -rf go-opera
 
 # Compile rosetta-fantom
-FROM golang:1.17 as rosetta-builder
+FROM golang:1.18 as rosetta-builder
 
 # Use native remote build context to build in any directory
 COPY . src
