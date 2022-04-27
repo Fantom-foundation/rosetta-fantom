@@ -20,7 +20,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
-// ChecksumAddress ensures an Ethereum hex address
+// ChecksumAddress ensures a hex address
 // is in Checksum Format. If the address cannot be converted,
 // it returns !ok.
 func ChecksumAddress(address string) (string, bool) {

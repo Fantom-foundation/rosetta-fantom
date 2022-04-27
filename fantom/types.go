@@ -75,11 +75,11 @@ const (
 	DestructOpType = "DESTRUCT"
 
 	// SuccessStatus is the status of any
-	// Ethereum operation considered successful.
+	// Opera operation considered successful.
 	SuccessStatus = "SUCCESS"
 
 	// FailureStatus is the status of any
-	// Ethereum operation considered unsuccessful.
+	// Opera operation considered unsuccessful.
 	FailureStatus = "FAILURE"
 
 	// HistoricalBalanceSupported is whether
@@ -128,7 +128,7 @@ var (
 	}
 
 	// Currency is the *types.Currency for all
-	// Ethereum networks.
+	// Opera networks.
 	Currency = &types.Currency{
 		Symbol:   Symbol,
 		Decimals: Decimals,

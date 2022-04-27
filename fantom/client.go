@@ -49,7 +49,7 @@ const (
 	eip1559TxType = 2
 )
 
-// Client allows for querying a set of specific Ethereum endpoints in an
+// Client allows for querying a set of specific Opera endpoints in an
 // idempotent manner. Client relies on the eth_*, debug_*, admin_*, and txpool_*
 // methods and on the graphql endpoint.
 //
@@ -659,7 +659,7 @@ type rpcRawCall struct {
 	Result json.RawMessage `json:"result"`
 }
 
-// Call is an Ethereum debug trace.
+// Call is an Opera debug trace.
 type Call struct {
 	Type         string         `json:"type"`
 	From         common.Address `json:"from"`
@@ -1194,15 +1194,6 @@ func (ec *Client) populateTransactions(
 		len(block.Transactions()), // include reward tx
 	)
 
-	/*
-	// Compute reward transaction (block + uncle reward)
-	transactions[0] = ec.blockRewardTransaction(
-		blockIdentifier,
-		block.Coinbase().String(),
-		block.Uncles(),
-	)
-	*/
-
 	for i, tx := range loadedTransactions {
 		transaction, err := ec.populateTransaction(
 			tx,
@@ -1489,7 +1480,7 @@ type txPool map[string]txPoolInner
 
 type txPoolInner map[string]rpcTransaction
 
-// GetMempool get and returns all the transactions on Ethereum TxPool (pending and queued).
+// GetMempool get and returns all the transactions on Opera TxPool (pending and queued).
 func (ec *Client) GetMempool(ctx context.Context) (*RosettaTypes.MempoolResponse, error) {
 	var response txPoolContentResponse
 	if err := ec.c.CallContext(ctx, &response, "txpool_content"); err != nil {
