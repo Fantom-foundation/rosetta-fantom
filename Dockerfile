@@ -31,8 +31,10 @@ RUN mkdir -p /app \
 # Compile rosetta-fantom
 FROM golang:1.18 as rosetta-builder
 
-# Use native remote build context to build in any directory
-COPY . src
+RUN git clone https://github.com/Fantom-foundation/rosetta-fantom src \
+  && cd src \
+  && git -c advice.detachedHead=false checkout 7dd551a76e2b25423f44ed7db020242e0bc436f7
+
 RUN cd src \
   && go build
 
