@@ -33,7 +33,7 @@ FROM golang:1.18 as rosetta-builder
 
 RUN git clone https://github.com/Fantom-foundation/rosetta-fantom src \
   && cd src \
-  && git -c advice.detachedHead=false checkout 7dd551a76e2b25423f44ed7db020242e0bc436f7
+  && git -c advice.detachedHead=false checkout 5e3b0918141d8e937e11c33903039dd403ea31a8
 
 RUN cd src \
   && go build
