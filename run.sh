@@ -17,7 +17,7 @@
 # Downloads and verifies the genesis file and starts the rosetta-fantom (which start opera if needed)
 ERRCODE=0
 
-echo "Running with network $NETWORK"
+echo "Running with network $NETWORK in $MODE mode"
 
 if [ "$NETWORK" == "MAINNET" ]; then
   GENESIS=mainnet.g
@@ -30,20 +30,26 @@ else
   exit 53
 fi
 
-# Download the genesis file if not exists
-echo "Downloading the genesis file $GENESIS if not exists"
-test -f "/data/$GENESIS" || wget -O "/data/$GENESIS" "https://opera.fantom.network/$GENESIS" || ERRCODE=$?
-if [ $ERRCODE != 0 ]; then
-  echo "Failed to download the genesis file ($ERRCODE)"
-  exit 51
-fi
+if [ "$MODE" == "ONLINE" ]; then
 
-# Check the genesis file checksum
-echo "Checking the genesis file checksum"
-echo "$GENESISHASH  /data/$GENESIS" | sha1sum -c - || ERRCODE=$?
-if [ $ERRCODE != 0 ]; then
-  echo "Invalid checksum of the genesis file /data/$GENESIS (not equal to $GENESISHASH)"
-  exit 52
+  # Download the genesis file if not exists
+  echo "Downloading the genesis file $GENESIS if not exists"
+  test -f "/data/$GENESIS" || wget -O "/data/$GENESIS" "https://opera.fantom.network/$GENESIS" || ERRCODE=$?
+  if [ $ERRCODE != 0 ]; then
+    echo "Failed to download the genesis file ($ERRCODE)"
+    exit 51
+  fi
+
+  # Check the genesis file checksum
+  echo "Checking the genesis file checksum"
+  echo "$GENESISHASH  /data/$GENESIS" | sha1sum -c - || ERRCODE=$?
+  if [ $ERRCODE != 0 ]; then
+    echo "Invalid checksum of the genesis file /data/$GENESIS (not equal to $GENESISHASH)"
+    exit 52
+  fi
+
+else
+  echo "Not online mode - skipping genesis file"
 fi
 
 /app/rosetta-fantom run
