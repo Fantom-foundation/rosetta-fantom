@@ -22,6 +22,10 @@ echo "Running with network $NETWORK in $MODE mode"
 if [ "$NETWORK" == "MAINNET" ]; then
   GENESIS=mainnet.g
   GENESISHASH=704105c268a01093f18e896767086efa68b8045e
+
+  # pruned snapshot for faster testing
+  SNAPSHOT=opera_pruned_20apr22.tgz
+  SNAPSHOTMD5=6b142110281f31c831c3182070687db2
 elif [ "$NETWORK" == "TESTNET" ]; then
   GENESIS=testnet.g
   GENESISHASH=ba37d578249da67cb5744069cc54f49a6938030d
@@ -46,6 +50,33 @@ if [ "$MODE" == "ONLINE" ]; then
   if [ $ERRCODE != 0 ]; then
     echo "Invalid checksum of the genesis file /data/$GENESIS (not equal to $GENESISHASH)"
     exit 52
+  fi
+
+  # Use snapshot if available and not initialized yet
+  if [ "$SNAPSHOT" != "" ] && [ ! -d "/data/chaindata" ]; then
+
+    # Download the snapshot
+    echo "Downloading the snapshot archive $SNAPSHOT"
+    test -f "/data/$SNAPSHOT" || wget -O "/data/$SNAPSHOT" "https://download.fantom.network/$SNAPSHOT" || ERRCODE=$?
+    if [ $ERRCODE != 0 ]; then
+      echo "Failed to download the snapshot file $SNAPSHOT ($ERRCODE)"
+      exit 54
+    fi
+
+    # Check the snapshot archive checksum
+    echo "Checking the snapshot archive checksum"
+    echo "$SNAPSHOTMD5  /data/$SNAPSHOT" | md5sum -c - || ERRCODE=$?
+    if [ $ERRCODE != 0 ]; then
+      echo "Invalid checksum of the genesis file /data/$SNAPSHOT (not equal to $SNAPSHOTMD5)"
+      exit 55
+    fi
+
+    # Extract the .opera/chaindata from the archive into /data/chaindata
+    tar --extract --file="$SNAPSHOT" --strip-components=1 --directory="/data/" || ERRCODE=$?
+    if [ $ERRCODE != 0 ]; then
+          echo "Invalid checksum of the genesis file /data/$SNAPSHOT (not equal to $SNAPSHOTMD5)"
+          exit 56
+        fi
   fi
 
 else
