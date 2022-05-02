@@ -22,10 +22,8 @@ echo "Running with network $NETWORK in $MODE mode"
 if [ "$NETWORK" == "MAINNET" ]; then
   GENESIS=mainnet.g
   GENESISHASH=704105c268a01093f18e896767086efa68b8045e
-
-  # pruned snapshot for faster testing
-  SNAPSHOT=opera_pruned_20apr22.tgz
-  SNAPSHOTMD5=6b142110281f31c831c3182070687db2
+  SNAPSHOT=opera_28apr22.tgz
+  SNAPSHOTMD5=4d1f7008a3dc06bb9d0a9cb5ddfe800f
 elif [ "$NETWORK" == "TESTNET" ]; then
   GENESIS=testnet.g
   GENESISHASH=ba37d578249da67cb5744069cc54f49a6938030d
@@ -52,11 +50,11 @@ if [ "$MODE" == "ONLINE" ]; then
     exit 52
   fi
 
-  # Use snapshot if available and not initialized yet
+  # Use snapshot if available and the database is not initialized yet
   if [ "$SNAPSHOT" != "" ] && [ ! -d "/data/chaindata" ]; then
 
     # Download the snapshot
-    echo "Downloading the snapshot archive $SNAPSHOT"
+    echo "Downloading the snapshot archive $SNAPSHOT if not exists"
     test -f "/data/$SNAPSHOT" || wget -O "/data/$SNAPSHOT" "https://download.fantom.network/$SNAPSHOT" || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
       echo "Failed to download the snapshot file $SNAPSHOT ($ERRCODE)"
@@ -72,9 +70,10 @@ if [ "$MODE" == "ONLINE" ]; then
     fi
 
     # Extract the .opera/chaindata from the archive into /data/chaindata
+    echo "Extracting the snapshot archive"
     tar --extract --file="/data/$SNAPSHOT" --strip-components=1 --directory="/data/" || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
-          echo "Failed to extract the snapshot file /data/$SNAPSHOT"
+          echo "Failed to extract the snapshot file /data/$SNAPSHOT ($ERRCODE)"
           exit 56
         fi
   fi
