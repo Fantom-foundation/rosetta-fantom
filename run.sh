@@ -67,14 +67,14 @@ if [ "$MODE" == "ONLINE" ]; then
     echo "Checking the snapshot archive checksum"
     echo "$SNAPSHOTMD5  /data/$SNAPSHOT" | md5sum -c - || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
-      echo "Invalid checksum of the genesis file /data/$SNAPSHOT (not equal to $SNAPSHOTMD5)"
+      echo "Invalid checksum of the snapshot file /data/$SNAPSHOT (not equal to $SNAPSHOTMD5)"
       exit 55
     fi
 
     # Extract the .opera/chaindata from the archive into /data/chaindata
-    tar --extract --file="$SNAPSHOT" --strip-components=1 --directory="/data/" || ERRCODE=$?
+    tar --extract --file="/data/$SNAPSHOT" --strip-components=1 --directory="/data/" || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
-          echo "Invalid checksum of the genesis file /data/$SNAPSHOT (not equal to $SNAPSHOTMD5)"
+          echo "Failed to extract the snapshot file /data/$SNAPSHOT"
           exit 56
         fi
   fi
