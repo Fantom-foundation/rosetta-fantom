@@ -42,19 +42,19 @@ update-tracer:
 	curl https://raw.githubusercontent.com/ethereum/go-ethereum/master/eth/tracers/js/internal/tracers/call_tracer_js.js -o fantom/call_tracer.js
 
 run-mainnet-online:
-	docker run --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data-mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data-mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-mainnet-online-var:
-	docker run --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/mainnet:/data" -e "MODE=ONLINE" -e "NETWORK=MAINNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-mainnet-offline:
-	docker run --rm -e "MODE=OFFLINE" -e "NETWORK=MAINNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest
+	docker run -d --rm -e "MODE=OFFLINE" -e "NETWORK=MAINNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest
 
 run-testnet-online:
-	docker run --rm --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data-testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --ulimit "nofile=${NOFILE}:${NOFILE}" -v "${PWD}/opera-data-testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-testnet-online-var:
-	docker run --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
+	docker run -d --ulimit "nofile=${NOFILE}:${NOFILE}" -v "/var/opera/testnet:/data" -e "MODE=ONLINE" -e "NETWORK=TESTNET" -e "PORT=8080" -p 8080:8080 -p 5050:5050 rosetta-fantom:latest
 
 run-testnet-offline:
 	docker run --rm -e "MODE=OFFLINE" -e "NETWORK=TESTNET" -e "PORT=8081" -p 8081:8081 rosetta-fantom:latest

@@ -73,13 +73,16 @@ if [ "$MODE" == "ONLINE" ]; then
     echo "Extracting the snapshot archive"
     tar --extract --file="/data/$SNAPSHOT" --strip-components=1 --directory="/data/" || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
-          echo "Failed to extract the snapshot file /data/$SNAPSHOT ($ERRCODE)"
-          exit 56
-        fi
+      echo "Failed to extract the snapshot file /data/$SNAPSHOT ($ERRCODE)"
+      exit 56
+    fi
+
+    echo "Extracted, removing the snapshot archive now"
+    rm -f "/data/$SNAPSHOT"
   fi
 
 else
-  echo "Not online mode - skipping genesis file"
+  echo "Offline mode - skipping genesis/snapshot file"
 fi
 
 /app/rosetta-fantom run
