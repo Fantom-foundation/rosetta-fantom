@@ -36,7 +36,7 @@ if [ "$MODE" == "ONLINE" ]; then
 
   # Download the genesis file if not exists
   echo "Downloading the genesis file $GENESIS if not exists"
-  test -f "/data/$GENESIS" || wget -O "/data/$GENESIS" "https://opera.fantom.network/$GENESIS" || ERRCODE=$?
+  test -f "/data/$GENESIS" || axel -n 10 -o "/data/$GENESIS" "https://opera.fantom.network/$GENESIS" || ERRCODE=$?
   if [ $ERRCODE != 0 ]; then
     echo "Failed to download the genesis file ($ERRCODE)"
     exit 51
@@ -55,7 +55,7 @@ if [ "$MODE" == "ONLINE" ]; then
 
     # Download the snapshot
     echo "Downloading the snapshot archive $SNAPSHOT if not exists"
-    test -f "/data/$SNAPSHOT" || wget -O "/data/$SNAPSHOT" "https://download.fantom.network/$SNAPSHOT" || ERRCODE=$?
+    test -f "/data/$SNAPSHOT" || axel -n 10 -o "/data/$SNAPSHOT" "https://download.fantom.network/$SNAPSHOT" || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
       echo "Failed to download the snapshot file $SNAPSHOT ($ERRCODE)"
       exit 54
