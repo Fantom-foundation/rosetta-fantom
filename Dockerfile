@@ -33,7 +33,7 @@ FROM golang:1.18 as rosetta-builder
 
 RUN git clone https://github.com/Fantom-foundation/rosetta-fantom src \
   && cd src \
-  && git -c advice.detachedHead=false checkout 1bc028c239339d7883fe578ff3550aa419a9ca23
+  && git -c advice.detachedHead=false checkout 93bbf938a2127ea6a3c97434cb67d06ced2d128b
 
 RUN cd src \
   && go build
@@ -49,7 +49,7 @@ RUN mkdir -p /app \
 ## Build Final Image
 FROM ubuntu:20.04
 
-RUN apt-get update && apt-get install -y ca-certificates wget && update-ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates wget axel && update-ca-certificates
 
 RUN mkdir -p /app \
   && chown -R nobody:nogroup /app \
