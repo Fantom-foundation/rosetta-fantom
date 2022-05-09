@@ -22,8 +22,8 @@ echo "Running with network $NETWORK in $MODE mode"
 if [ "$NETWORK" == "MAINNET" ]; then
   GENESIS=mainnet.g
   GENESISHASH=704105c268a01093f18e896767086efa68b8045e
-  SNAPSHOT=opera_28apr22.tgz
-  SNAPSHOTMD5=4d1f7008a3dc06bb9d0a9cb5ddfe800f
+  SNAPSHOT=opera_5may22.tgz
+  SNAPSHOTMD5=3981d701e47ec9fd8a71dbbdc01f1cde
 elif [ "$NETWORK" == "TESTNET" ]; then
   GENESIS=testnet.g
   GENESISHASH=ba37d578249da67cb5744069cc54f49a6938030d
