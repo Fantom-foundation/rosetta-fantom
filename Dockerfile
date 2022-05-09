@@ -16,10 +16,10 @@
 # Compile Opera
 FROM golang:1.18 as opera-builder
 
-# VERSION: go-opera release/txtracing/1.1.0-rc.4
+# VERSION: go-opera release/txtracing/1.1.0-rc.5
 RUN git clone https://github.com/Fantom-foundation/go-opera \
   && cd go-opera \
-  && git -c advice.detachedHead=false checkout a8e13986de3c51aa4c0f38047b54a6e75e1bea4f
+  && git -c advice.detachedHead=false checkout 004e7a6e206210b440f7a510845ca6df106fedeb
 
 RUN cd go-opera \
   && make
