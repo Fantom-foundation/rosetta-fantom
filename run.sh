@@ -20,13 +20,13 @@ ERRCODE=0
 echo "Running with network $NETWORK in $MODE mode"
 
 if [ "$NETWORK" == "MAINNET" ]; then
-  GENESIS=mainnet.g
-  GENESISHASH=704105c268a01093f18e896767086efa68b8045e
-  SNAPSHOT=opera_5may22.tgz
-  SNAPSHOTMD5=3981d701e47ec9fd8a71dbbdc01f1cde
+  GENESIS="$MAINNET_GENESIS"
+  GENESISHASH="$MAINNET_GENESIS_HASH"
+  SNAPSHOT="$MAINNET_SNAPSHOT"
+  SNAPSHOTMD5="$MAINNET_SNAPSHOT_MD5"
 elif [ "$NETWORK" == "TESTNET" ]; then
-  GENESIS=testnet.g
-  GENESISHASH=ba37d578249da67cb5744069cc54f49a6938030d
+  GENESIS="$TESTNET_GENESIS"
+  GENESISHASH="$TESTNET_GENESIS_HASH"
 else
   echo "Unrecognized NETWORK variable!"
   exit 53
@@ -85,4 +85,4 @@ else
   echo "Offline mode - skipping genesis/snapshot file"
 fi
 
-/app/rosetta-fantom run
+exec /app/rosetta-fantom run

@@ -69,4 +69,12 @@ COPY --from=rosetta-builder /app/run.sh /app/run.sh
 # Set permissions for everything added to /app
 RUN chmod -R 755 /app/*
 
+# Set environment variables for run.sh
+ENV MAINNET_GENESIS=mainnet.g \
+    MAINNET_GENESIS_HASH=704105c268a01093f18e896767086efa68b8045e \
+    MAINNET_SNAPSHOT=opera_5may22.tgz \
+    MAINNET_SNAPSHOT_MD5=3981d701e47ec9fd8a71dbbdc01f1cde \
+    TESTNET_GENESIS=testnet.g \
+    TESTNET_GENESIS_HASH=ba37d578249da67cb5744069cc54f49a6938030d
+
 CMD ["/bin/bash", "/app/run.sh"]
