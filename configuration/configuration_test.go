@@ -34,6 +34,7 @@ func TestLoadConfiguration(t *testing.T) {
 		Port      string
 		Opera     string
 		SkipAdmin string
+		OperaArgs string
 
 		cfg *Configuration
 		err error
@@ -46,15 +47,17 @@ func TestLoadConfiguration(t *testing.T) {
 			err:  errors.New("NETWORK must be populated"),
 		},
 		"only mode and network set": {
-			Mode:    string(Online),
-			Network: Mainnet,
-			err:     errors.New("PORT must be populated"),
+			Mode:      string(Online),
+			Network:   Mainnet,
+			OperaArgs: "--",
+			err:       errors.New("PORT must be populated"),
 		},
 		"all set (mainnet)": {
 			Mode:      string(Online),
 			Network:   Mainnet,
 			Port:      "1000",
 			SkipAdmin: "FALSE",
+			OperaArgs: "--",
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
@@ -64,7 +67,7 @@ func TestLoadConfiguration(t *testing.T) {
 				GenesisBlockIdentifier: fantom.FantomMainnetGenesisBlockIdentifier,
 				Port:                   1000,
 				OperaURL:               DefaultOperaURL,
-				OperaArguments:         fantom.MainnetOperaArguments,
+				OperaArguments:         "--",
 				SkipAdmin:              false,
 				ChainID:                big.NewInt(0xFA),
 			},
@@ -75,6 +78,7 @@ func TestLoadConfiguration(t *testing.T) {
 			Port:      "1000",
 			Opera:     "http://blah",
 			SkipAdmin: "TRUE",
+			OperaArgs: "--",
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
@@ -85,7 +89,7 @@ func TestLoadConfiguration(t *testing.T) {
 				Port:                   1000,
 				OperaURL:               "http://blah",
 				RemoteOpera:            true,
-				OperaArguments:         fantom.MainnetOperaArguments,
+				OperaArguments:         "--",
 				SkipAdmin:              true,
 				ChainID:                big.NewInt(0xFA),
 			},
@@ -95,6 +99,7 @@ func TestLoadConfiguration(t *testing.T) {
 			Network:   Testnet,
 			Port:      "1000",
 			SkipAdmin: "TRUE",
+			OperaArgs: "--",
 			cfg: &Configuration{
 				Mode: Online,
 				Network: &types.NetworkIdentifier{
@@ -104,7 +109,7 @@ func TestLoadConfiguration(t *testing.T) {
 				GenesisBlockIdentifier: fantom.FantomTestnetGenesisBlockIdentifier,
 				Port:                   1000,
 				OperaURL:               DefaultOperaURL,
-				OperaArguments:         fantom.TestnetOperaArguments,
+				OperaArguments:         "--",
 				SkipAdmin:              true,
 				ChainID:                big.NewInt(0xFA2),
 			},
@@ -122,10 +127,11 @@ func TestLoadConfiguration(t *testing.T) {
 			err:     errors.New("bad network is not a valid network"),
 		},
 		"invalid port": {
-			Mode:    string(Offline),
-			Network: Testnet,
-			Port:    "bad port",
-			err:     errors.New("unable to parse port bad port"),
+			Mode:      string(Offline),
+			Network:   Testnet,
+			Port:      "bad port",
+			OperaArgs: "--",
+			err:       errors.New("unable to parse port bad port"),
 		},
 	}
 
@@ -136,6 +142,7 @@ func TestLoadConfiguration(t *testing.T) {
 			os.Setenv(PortEnv, test.Port)
 			os.Setenv(OperaEnv, test.Opera)
 			os.Setenv(SkipAdminEnv, test.SkipAdmin)
+			os.Setenv(OperaArgsEnv, test.OperaArgs)
 
 			cfg, err := LoadConfiguration()
 			if test.err != nil {

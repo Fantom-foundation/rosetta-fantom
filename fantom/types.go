@@ -24,7 +24,7 @@ import (
 
 const (
 	// NodeVersion is the version of opera we are using.
-	NodeVersion = "1.1.0-rc.4"
+	NodeVersion = "1.1.0-rc.5"
 
 	// Blockchain is Fantom.
 	Blockchain string = "Fantom"
@@ -93,12 +93,6 @@ const (
 	// TransferGasLimit is the gas limit
 	// of a transfer.
 	TransferGasLimit = int64(21000) //nolint:gomnd
-
-	// MainnetOperaArguments are the arguments to start a mainnet Opera instance.
-	MainnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/mainnet.g`
-
-	// TestnetOperaArguments are the arguments to start a testnet Opera instance.
-	TestnetOperaArguments = `--config=/app/fantom/opera.toml --genesis=/data/testnet.g`
 
 	// IncludeMempoolCoins does not apply to rosetta-fantom as it is not UTXO-based.
 	IncludeMempoolCoins = false

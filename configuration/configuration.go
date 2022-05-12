@@ -73,6 +73,9 @@ const (
 	// by hosted node services. When not set, defaults to true.
 	SkipAdminEnv = "SKIP_ADMIN"
 
+	// OperaArgsEnv is an environment variable to pass arguments to the Opera process
+	OperaArgsEnv = "OPERA_ARGS"
+
 	// MiddlewareVersion is the version of rosetta-fantom.
 	MiddlewareVersion = "0.0.4"
 )
@@ -116,7 +119,6 @@ func LoadConfiguration() (*Configuration, error) {
 		}
 		config.GenesisBlockIdentifier = fantom.FantomMainnetGenesisBlockIdentifier
 		config.ChainID = big.NewInt(0xFA)
-		config.OperaArguments = fantom.MainnetOperaArguments
 	case Testnet:
 		config.Network = &types.NetworkIdentifier{
 			Blockchain: fantom.Blockchain,
@@ -124,7 +126,6 @@ func LoadConfiguration() (*Configuration, error) {
 		}
 		config.GenesisBlockIdentifier = fantom.FantomTestnetGenesisBlockIdentifier
 		config.ChainID = big.NewInt(0xFA2)
-		config.OperaArguments = fantom.TestnetOperaArguments
 	case "":
 		return nil, errors.New("NETWORK must be populated")
 	default:
@@ -136,6 +137,11 @@ func LoadConfiguration() (*Configuration, error) {
 	if len(envOperaURL) > 0 {
 		config.RemoteOpera = true
 		config.OperaURL = envOperaURL
+	}
+
+	config.OperaArguments = os.Getenv(OperaArgsEnv)
+	if len(config.OperaArguments) == 0 {
+		return nil, errors.New("OPERA_ARGS must be populated")
 	}
 
 	config.SkipAdmin = false

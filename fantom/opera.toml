@@ -1,6 +1,5 @@
 [Node]
 DataDir = "/data"
-NoUSB = true
 HTTPHost = "0.0.0.0"
 HTTPPort = 18545
 HTTPVirtualHosts = ["*"]
