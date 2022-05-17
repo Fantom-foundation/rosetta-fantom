@@ -16,10 +16,10 @@
 # Compile Opera
 FROM golang:1.18 as opera-builder
 
-# VERSION: go-opera release/txtracing/1.1.0-rc.5 + feature/refactor-upgrade-heights-txtracing
-RUN git clone https://github.com/uprendis/go-opera.git \
+# VERSION: go-opera release/txtracing/1.1.0-rc.5.1
+RUN git clone https://github.com/Fantom-foundation/go-opera.git \
    && cd go-opera \
-  && git -c advice.detachedHead=false checkout 04c4e533e23784aa08b1f5e9af39814ce26a7bbd
+  && git -c advice.detachedHead=false checkout 9d04ffe922729ab3256b0e0cff72a628d0d006d4
 
 RUN cd go-opera \
   && make
