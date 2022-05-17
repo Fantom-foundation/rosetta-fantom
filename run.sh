@@ -57,7 +57,7 @@ if [ "$MODE" == "ONLINE" ]; then
 
     # Download the snapshot
     echo "Downloading the snapshot archive $SNAPSHOT if not exists"
-    test -f "/data/$SNAPSHOT" || axel -n 10 -o "/data/$SNAPSHOT" "https://download.fantom.network/$SNAPSHOT" || ERRCODE=$?
+    test -f "/data/$SNAPSHOT" || axel -n 10 -o "/data/$SNAPSHOT" "https://download.fantom.network/snap/$SNAPSHOT" || ERRCODE=$?
     if [ $ERRCODE != 0 ]; then
       echo "Failed to download the snapshot file $SNAPSHOT ($ERRCODE)"
       exit 54
