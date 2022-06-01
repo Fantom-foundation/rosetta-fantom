@@ -16,10 +16,10 @@
 # Compile Opera
 FROM golang:1.18 as opera-builder
 
-# VERSION: go-opera release/txtracing/1.1.0-rc.5.1
+# VERSION: go-opera release/txtracing/1.1.1-rc.1
 RUN git clone https://github.com/Fantom-foundation/go-opera.git \
    && cd go-opera \
-  && git -c advice.detachedHead=false checkout 9d04ffe922729ab3256b0e0cff72a628d0d006d4
+  && git -c advice.detachedHead=false checkout 65a136e30e060bfdc7d8b67963b298cd87bc8306
 
 RUN cd go-opera \
   && make
@@ -33,7 +33,7 @@ FROM golang:1.18 as rosetta-builder
 
 RUN git clone https://github.com/Fantom-foundation/rosetta-fantom src \
   && cd src \
-  && git -c advice.detachedHead=false checkout 31a5eb5804271ff2bb0bc01a23a6e44c2e940b9e
+  && git -c advice.detachedHead=false checkout 3fbea532d1c7926c6703bebdda85b355c24d7661
 
 RUN cd src \
   && go build
@@ -70,10 +70,10 @@ COPY --from=rosetta-builder /app/run.sh /app/run.sh
 RUN chmod -R 755 /app/*
 
 # Set environment variables for run.sh
-ENV MAINNET_OPERA_ARGS="--config=/app/fantom/opera.toml --genesis=/data/mainnet.g" \
+ENV MAINNET_OPERA_ARGS="--config=/app/fantom/opera.toml" \
     TESTNET_OPERA_ARGS="--config=/app/fantom/opera.toml --genesis=/data/testnet.g" \
-    MAINNET_GENESIS=mainnet.g \
-    MAINNET_GENESIS_HASH=704105c268a01093f18e896767086efa68b8045e \
+    MAINNET_GENESIS="" \
+    MAINNET_GENESIS_HASH="" \
     MAINNET_SNAPSHOT=opera_5may22.tgz \
     MAINNET_SNAPSHOT_MD5=3981d701e47ec9fd8a71dbbdc01f1cde \
     TESTNET_GENESIS=testnet.g \
