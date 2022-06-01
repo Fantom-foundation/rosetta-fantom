@@ -36,20 +36,23 @@ fi
 
 if [ "$MODE" == "ONLINE" ]; then
 
-  # Download the genesis file if not exists
-  echo "Downloading the genesis file $GENESIS if not exists"
-  test -f "/data/$GENESIS" || axel -n 10 -o "/data/$GENESIS" "https://opera.fantom.network/$GENESIS" || ERRCODE=$?
-  if [ $ERRCODE != 0 ]; then
-    echo "Failed to download the genesis file ($ERRCODE)"
-    exit 51
-  fi
+  if [ "$GENESIS" != "" ]; then
 
-  # Check the genesis file checksum
-  echo "Checking the genesis file checksum"
-  echo "$GENESISHASH  /data/$GENESIS" | sha1sum -c - || ERRCODE=$?
-  if [ $ERRCODE != 0 ]; then
-    echo "Invalid checksum of the genesis file /data/$GENESIS (not equal to $GENESISHASH)"
-    exit 52
+    # Download the genesis file if not exists
+    echo "Downloading the genesis file $GENESIS if not exists"
+    test -f "/data/$GENESIS" || axel -n 10 -o "/data/$GENESIS" "https://opera.fantom.network/$GENESIS" || ERRCODE=$?
+    if [ $ERRCODE != 0 ]; then
+      echo "Failed to download the genesis file ($ERRCODE)"
+      exit 51
+    fi
+
+    # Check the genesis file checksum
+    echo "Checking the genesis file checksum"
+    echo "$GENESISHASH  /data/$GENESIS" | sha1sum -c - || ERRCODE=$?
+    if [ $ERRCODE != 0 ]; then
+      echo "Invalid checksum of the genesis file /data/$GENESIS (not equal to $GENESISHASH)"
+      exit 52
+    fi
   fi
 
   # Use snapshot if available and the database is not initialized yet
